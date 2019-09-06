@@ -8,8 +8,8 @@ public class CPU {
 	private RegisterPair registerBC, registerDE, registerHL;
 	private boolean interruptDisabled, cpuOn, screenOn;
 	private Opcodes ops;
-	public Disassembler disassembler;
 	private Memory mem;
+	private Disassembler disassembler;
 	
 	public CPU() {
 		registerPSW = new PSWRegister();
@@ -26,26 +26,14 @@ public class CPU {
 		disassembler = new Disassembler(this);
 	}
 	
+	public String disassemble() {
+		return disassembler.run(mem.read(programCounter));
+	}
+	
 	public int clock() {
 		int opcode = this.getNext();
 		ops.run(opcode);
 		return opcode;
-	}
-	
-	public String disassemble() {
-		return this.disassemble(0x0000, 0xffff);
-	}
-	
-	public String disassemble(int start) {
-		return this.disassemble(start, 0xffff);
-	}
-	
-	public String disassemble(int start, int end) {
-		String result = "";
-		for (int i = start; i < start + end; i++) {
-            
-        }
-		return result;
 	}
 	
 	public int getNext() {

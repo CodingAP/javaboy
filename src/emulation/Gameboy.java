@@ -31,17 +31,6 @@ public class Gameboy {
 	}
 	
 	public void run() {
-		cpu.disassemble(0x0000, 0x00ff);
-//		System.out.print("Program Counter: " + Utils.toHex(cpu.getProgramCounter()) + " (" + Utils.toHex(cpu.clock()) + ") - ");
-//		System.out.print("Register A: " + Utils.toHex(cpu.getRegisterPSW().getRegisterA()) + ", ");
-//		System.out.print("Register F: " + Utils.toHex(cpu.getRegisterPSW().getStatusFlags()) + ", ");
-//		System.out.print("Register B: " + Utils.toHex(cpu.getRegisterBC().getRegister1()) + ", ");
-//		System.out.print("Register C: " + Utils.toHex(cpu.getRegisterBC().getRegister2()) + ", ");
-//		System.out.print("Register D: " + Utils.toHex(cpu.getRegisterDE().getRegister1()) + ", ");
-//		System.out.print("Register E: " + Utils.toHex(cpu.getRegisterDE().getRegister2()) + ", ");
-//		System.out.print("Register H: " + Utils.toHex(cpu.getRegisterHL().getRegister1()) + ", ");
-//		System.out.print("Register L: " + Utils.toHex(cpu.getRegisterHL().getRegister2()) + ", ");
-//		System.out.print("Stack Pointer: " + Utils.toHex(cpu.getStackPointer()));
-//		System.out.println();
+		cpu.clock();
 	}
 }

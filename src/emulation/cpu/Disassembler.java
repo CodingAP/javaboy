@@ -9,245 +9,254 @@ public class Disassembler {
 		this.cpu = cpu;
 	}
 	
-	public void run(int opcode) {
+	public String run(int opcode) {
 		switch (opcode) {
-			case 0x00: this.nop(); break;
-			case 0x3e: this.ldn("A"); break;
-			case 0x06: this.ldn("B"); break;
-			case 0x0e: this.ldn("C"); break;
-			case 0x16: this.ldn("D"); break;
-			case 0x1e: this.ldn("E"); break;
-			case 0x26: this.ldn("H"); break;
-			case 0x2e: this.ldn("L"); break;
-			case 0x7f: this.ldrr("A", "A"); break;
-			case 0x78: this.ldrr("A", "B"); break;
-			case 0x79: this.ldrr("A", "C"); break;
-			case 0x7a: this.ldrr("A", "D"); break;
-			case 0x7b: this.ldrr("A", "E"); break;
-			case 0x7c: this.ldrr("A", "H"); break;
-			case 0x7d: this.ldrr("A", "L"); break;
-			case 0x7e: this.ldrr("A", "(HL)"); break;
-			case 0x47: this.ldrr("B", "A"); break;
-			case 0x40: this.ldrr("B", "B"); break;
-			case 0x41: this.ldrr("B", "C"); break;
-			case 0x42: this.ldrr("B", "D"); break;
-			case 0x43: this.ldrr("B", "E"); break;
-			case 0x44: this.ldrr("B", "H"); break;
-			case 0x45: this.ldrr("B", "L"); break;
-			case 0x46: this.ldrr("B", "(HL)"); break;
-			case 0x4f: this.ldrr("C", "A"); break;
-			case 0x48: this.ldrr("C", "B"); break;
-			case 0x49: this.ldrr("C", "C"); break;
-			case 0x4a: this.ldrr("C", "D"); break;
-			case 0x4b: this.ldrr("C", "E"); break;
-			case 0x4c: this.ldrr("C", "H"); break;
-			case 0x4d: this.ldrr("C", "L"); break;
-			case 0x4e: this.ldrr("C", "(HL)"); break;
-			case 0x57: this.ldrr("D", "A"); break;
-			case 0x50: this.ldrr("D", "B"); break;
-			case 0x51: this.ldrr("D", "C"); break;
-			case 0x52: this.ldrr("D", "D"); break;
-			case 0x53: this.ldrr("D", "E"); break;
-			case 0x54: this.ldrr("D", "H"); break;
-			case 0x55: this.ldrr("D", "L"); break;
-			case 0x56: this.ldrr("D", "(HL)"); break;
-			case 0x5f: this.ldrr("E", "A"); break;
-			case 0x58: this.ldrr("E", "B"); break;
-			case 0x59: this.ldrr("E", "C"); break;
-			case 0x5a: this.ldrr("E", "D"); break;
-			case 0x5b: this.ldrr("E", "E"); break;
-			case 0x5c: this.ldrr("E", "H"); break;
-			case 0x5d: this.ldrr("E", "L"); break;
-			case 0x5e: this.ldrr("E", "(HL)"); break;
-			case 0x67: this.ldrr("H", "A"); break;
-			case 0x60: this.ldrr("H", "B"); break;
-			case 0x61: this.ldrr("H", "C"); break; //6F: LD H, C - Load Register C to Register H - Page 66
-			case 0x62: this.ldrr("H", "D"); break;
-			case 0x63: this.ldrr("H", "E"); break;
-			case 0x64: this.ldrr("H", "H"); break;
-			case 0x65: this.ldrr("H", "L"); break;
-			case 0x66: this.ldrr("H", "(HL)"); break;
-			case 0x6f: this.ldrr("L", "A"); break;
-			case 0x68: this.ldrr("L", "B"); break;
-			case 0x69: this.ldrr("L", "C"); break;
-			case 0x6a: this.ldrr("L", "D"); break;
-			case 0x6b: this.ldrr("L", "E"); break;
-			case 0x6c: this.ldrr("L", "H"); break;
-			case 0x6d: this.ldrr("L", "L"); break;
-			case 0x6e: this.ldrr("L", "(HL)"); break;
-			case 0x77: this.ldrr("(HL)", "A"); break;
-			case 0x70: this.ldrr("(HL)", "B"); break;
-			case 0x71: this.ldrr("(HL)", "C"); break;
-			case 0x72: this.ldrr("(HL)", "D"); break;
-			case 0x73: this.ldrr("(HL)", "E"); break;
-			case 0x74: this.ldrr("(HL)", "H"); break;
-			case 0x75: this.ldrr("(HL)", "L"); break;
-			case 0x36: this.ldrr("(HL)", "n"); break;
-			case 0x0a: this.ldrr("A", "(BC)"); break;
-			case 0x1a: this.ldrr("A", "(DE)"); break;
-			case 0xfa: this.ldrr("A", "(nn)"); break;
-			case 0x02: this.ldrr("(BC)", "A"); break;
-			case 0x12: this.ldrr("(DE)", "A"); break;
-			case 0xea: this.ldrr("(nn)", "A"); break;
-			case 0xf2: this.ldalp("C"); break;
-			case 0xe2: this.ldlpa("C"); break;
-			case 0xe0: this.ldalp("n"); break;
-			case 0xf0: this.ldlpa("n"); break;
-			case 0x3a: this.ldd("A", "(HL)"); break;
-			case 0x32: this.ldd("(HL)", "A"); break;
-			case 0x2a: this.ldi("A", "(HL)"); break;
-			case 0x22: this.ldi("(HL)", "A"); break;
-			case 0x01: this.ldrr("BC", "nn"); break;
-			case 0x11: this.ldrr("DE", "nn"); break;
-			case 0x21: this.ldrr("HL", "nn"); break;
-			case 0x31: this.ldrr("SP", "nn"); break;
-			case 0xf9: this.ldrr("SP", "HL"); break;
-			case 0xf8: this.ldhl(); break;
-			case 0x08: this.ldrr("SP", "nn"); break;
-			case 0xf5: this.push("AF"); break;
-			case 0xc5: this.push("BC"); break;
-			case 0xd5: this.push("DE"); break;
-			case 0xe5: this.push("HL"); break;
-			case 0xf1: this.pop("AF"); break;
-			case 0xc1: this.pop("BC"); break;
-			case 0xd1: this.pop("DE"); break;
-			case 0xe1: this.pop("HL"); break;
-			case 0x87: this.add("A"); break;
-			case 0x80: this.add("B"); break;
-			case 0x81: this.add("C"); break;
-			case 0x82: this.add("D"); break;
-			case 0x83: this.add("E"); break;
-			case 0x84: this.add("H"); break;
-			case 0x85: this.add("L"); break;
-			case 0x86: this.add("(HL)"); break;
-			case 0xc6: this.add("n"); break;
-			case 0x8f: this.add("A", true); break;
-			case 0x88: this.add("B", true); break;
-			case 0x89: this.add("C", true); break;
-			case 0x8a: this.add("D", true); break;
-			case 0x8b: this.add("E", true); break;
-			case 0x8c: this.add("H", true); break;
-			case 0x8d: this.add("L", true); break;
-			case 0x8e: this.add("(HL)", true); break;
-			case 0xce: this.add("n", true); break;
-			case 0x97: this.sub("A"); break;
-			case 0x90: this.sub("B"); break;
-			case 0x91: this.sub("C"); break;
-			case 0x92: this.sub("D"); break;
-			case 0x93: this.sub("E"); break;
-			case 0x94: this.sub("H"); break;
-			case 0x95: this.sub("L"); break;
-			case 0x96: this.sub("(HL)"); break;
-			case 0xd6: this.sub("n"); break;
-			case 0x9f: this.sub("A", true); break;
-			case 0x98: this.sub("B", true); break;
-			case 0x99: this.sub("C", true); break;
-			case 0x9a: this.sub("D", true); break;
-			case 0x9b: this.sub("E", true); break;
-			case 0x9c: this.sub("H", true); break;
-			case 0x9d: this.sub("L", true); break;
-			case 0x9e: this.sub("(HL)", true); break;
-			case 0xde: this.sub("n", true); break;
-			case 0xa7: this.and("A"); break;
-			case 0xa0: this.and("B"); break;
-			case 0xa1: this.and("C"); break;
-			case 0xa2: this.and("D"); break;
-			case 0xa3: this.and("E"); break;
-			case 0xa4: this.and("H"); break;
-			case 0xa5: this.and("L"); break;
-			case 0xa6: this.and("(HL)"); break;
-			case 0xe6: this.and("n"); break;
-			case 0xb7: this.or("A"); break;
-			case 0xb0: this.or("B"); break;
-			case 0xb1: this.or("C"); break;
-			case 0xb2: this.or("D"); break;
-			case 0xb3: this.or("E"); break;
-			case 0xb4: this.or("H"); break;
-			case 0xb5: this.or("L"); break;
-			case 0xb6: this.or("(HL)"); break;
-			case 0xf6: this.or("n"); break;
-			case 0xaf: this.xor("A"); break;
-			case 0xa8: this.xor("B"); break;
-			case 0xa9: this.xor("C"); break;
-			case 0xaa: this.xor("D"); break;
-			case 0xab: this.xor("E"); break;
-			case 0xac: this.xor("H"); break;
-			case 0xad: this.xor("L"); break;
-			case 0xae: this.xor("(HL)"); break;
-			case 0xee: this.xor("n"); break;
-			case 0x3c: this.inc("A"); break;
-			case 0x04: this.inc("B"); break;
-			case 0x0c: this.inc("C"); break;
-			case 0x14: this.inc("D"); break;
-			case 0x1c: this.inc("E"); break;
-			case 0x24: this.inc("H"); break;
-			case 0x2c: this.inc("L"); break;
-			case 0x34: this.inc("(HL)"); break;
-			case 0x3d: this.dec("A"); break;
-			case 0x05: this.dec("B"); break;
-			case 0x0d: this.dec("C"); break;
-			case 0x15: this.dec("D"); break;
-			case 0x1d: this.dec("E"); break;
-			case 0x25: this.dec("H"); break;
-			case 0x2d: this.dec("L"); break;
-			case 0x35: this.dec("(HL)"); break;
-			case 0x09: this.add16("BC"); break;
-			case 0x19: this.add16("DE"); break;
-			case 0x29: this.add16("HL"); break;
-			case 0x39: this.add16("SP"); break;
-			case 0xe8: this.addsp(); break;
-			case 0x03: this.inc16("BC"); break;
-			case 0x13: this.inc16("DE"); break;
-			case 0x23: this.inc16("HL"); break;
-			case 0x33: this.inc16("SP"); break;
-			case 0x0b: this.dec16("BC"); break;
-			case 0x1b: this.dec16("DE"); break;
-			case 0x2b: this.dec16("HL"); break;
-			case 0x3b: this.dec16("SP"); break;
-			case 0x27: this.daa(); break;
-			case 0x2f: this.cpl(); break;
-			case 0x3f: this.ccf(); break;
-			case 0x37: this.scf(); break;
-			case 0x76: this.halt(); break;
-			case 0x10: this.stop(); break;
-			case 0xf3: this.inte(false); break;
-			case 0xfb: this.inte(true); break;
-			case 0x07: this.rl("A", false); break;
-			case 0x17: this.rl("A", true); break;
-			case 0x0f: this.rr("A", false); break;
-			case 0x1f: this.rr("A", true); break;
-			case 0xc3: this.jp("nn"); break;
-			case 0xc2: this.jpc("NZ"); break;
-			case 0xca: this.jpc("Z"); break;
-			case 0xd2: this.jpc("NC"); break;
-			case 0xda: this.jpc("C"); break;
-			case 0xe9: this.jp("HL"); break;
-			case 0x18: this.jpr(); break;
-			case 0x20: this.jprc("NZ"); break;
-			case 0x28: this.jprc("Z"); break;
-			case 0x30: this.jprc("NC"); break;
-			case 0x38: this.jprc("C"); break;
-			case 0xcd: this.call(); break;
-			case 0xc4: this.callc("NZ"); break;
-			case 0xcc: this.callc("Z"); break;
-			case 0xd4: this.callc("NC"); break;
-			case 0xdc: this.callc("C"); break;
-			case 0xc7: this.rst(0x00); break;
-			case 0xcf: this.rst(0x08); break;
-			case 0xd7: this.rst(0x10); break;
-			case 0xdf: this.rst(0x18); break;
-			case 0xe7: this.rst(0x20); break;
-			case 0xef: this.rst(0x28); break;
-			case 0xf7: this.rst(0x30); break;
-			case 0xff: this.rst(0x38); break;
-			case 0xc9: this.ret(false); break;
-			case 0xd9: this.ret(true); break;
-			case 0xc0: this.retc("NZ"); break;
-			case 0xc8: this.retc("Z"); break;
-			case 0xd0: this.retc("NC"); break;
-			case 0xd8: this.retc("C"); break;
-			case 0xcb: this.c6bit(); break;
-			default: this.unknown(opcode); break;
+			case 0x00: return this.nop();
+			case 0x3e: return this.ldn("A"); 
+			case 0x06: return this.ldn("B"); 
+			case 0x0e: return this.ldn("C"); 
+			case 0x16: return this.ldn("D"); 
+			case 0x1e: return this.ldn("E"); 
+			case 0x26: return this.ldn("H"); 
+			case 0x2e: return this.ldn("L"); 
+			case 0x7f: return this.ldrr("A", "A"); 
+			case 0x78: return this.ldrr("A", "B"); 
+			case 0x79: return this.ldrr("A", "C"); 
+			case 0x7a: return this.ldrr("A", "D"); 
+			case 0x7b: return this.ldrr("A", "E"); 
+			case 0x7c: return this.ldrr("A", "H"); 
+			case 0x7d: return this.ldrr("A", "L"); 
+			case 0x7e: return this.ldrr("A", "(HL)"); 
+			case 0x47: return this.ldrr("B", "A"); 
+			case 0x40: return this.ldrr("B", "B"); 
+			case 0x41: return this.ldrr("B", "C"); 
+			case 0x42: return this.ldrr("B", "D"); 
+			case 0x43: return this.ldrr("B", "E"); 
+			case 0x44: return this.ldrr("B", "H"); 
+			case 0x45: return this.ldrr("B", "L"); 
+			case 0x46: return this.ldrr("B", "(HL)"); 
+			case 0x4f: return this.ldrr("C", "A"); 
+			case 0x48: return this.ldrr("C", "B"); 
+			case 0x49: return this.ldrr("C", "C"); 
+			case 0x4a: return this.ldrr("C", "D"); 
+			case 0x4b: return this.ldrr("C", "E"); 
+			case 0x4c: return this.ldrr("C", "H"); 
+			case 0x4d: return this.ldrr("C", "L"); 
+			case 0x4e: return this.ldrr("C", "(HL)"); 
+			case 0x57: return this.ldrr("D", "A"); 
+			case 0x50: return this.ldrr("D", "B"); 
+			case 0x51: return this.ldrr("D", "C"); 
+			case 0x52: return this.ldrr("D", "D"); 
+			case 0x53: return this.ldrr("D", "E"); 
+			case 0x54: return this.ldrr("D", "H"); 
+			case 0x55: return this.ldrr("D", "L"); 
+			case 0x56: return this.ldrr("D", "(HL)"); 
+			case 0x5f: return this.ldrr("E", "A"); 
+			case 0x58: return this.ldrr("E", "B"); 
+			case 0x59: return this.ldrr("E", "C"); 
+			case 0x5a: return this.ldrr("E", "D"); 
+			case 0x5b: return this.ldrr("E", "E"); 
+			case 0x5c: return this.ldrr("E", "H"); 
+			case 0x5d: return this.ldrr("E", "L"); 
+			case 0x5e: return this.ldrr("E", "(HL)"); 
+			case 0x67: return this.ldrr("H", "A"); 
+			case 0x60: return this.ldrr("H", "B"); 
+			case 0x61: return this.ldrr("H", "C");  //6F: LD H, C - Load Register C to Register H - Page 66
+			case 0x62: return this.ldrr("H", "D"); 
+			case 0x63: return this.ldrr("H", "E"); 
+			case 0x64: return this.ldrr("H", "H"); 
+			case 0x65: return this.ldrr("H", "L"); 
+			case 0x66: return this.ldrr("H", "(HL)"); 
+			case 0x6f: return this.ldrr("L", "A"); 
+			case 0x68: return this.ldrr("L", "B"); 
+			case 0x69: return this.ldrr("L", "C"); 
+			case 0x6a: return this.ldrr("L", "D"); 
+			case 0x6b: return this.ldrr("L", "E"); 
+			case 0x6c: return this.ldrr("L", "H"); 
+			case 0x6d: return this.ldrr("L", "L"); 
+			case 0x6e: return this.ldrr("L", "(HL)"); 
+			case 0x77: return this.ldrr("(HL)", "A"); 
+			case 0x70: return this.ldrr("(HL)", "B"); 
+			case 0x71: return this.ldrr("(HL)", "C"); 
+			case 0x72: return this.ldrr("(HL)", "D"); 
+			case 0x73: return this.ldrr("(HL)", "E"); 
+			case 0x74: return this.ldrr("(HL)", "H"); 
+			case 0x75: return this.ldrr("(HL)", "L"); 
+			case 0x36: return this.ldrn("(HL)", "n"); 
+			case 0x0a: return this.ldrr("A", "(BC)"); 
+			case 0x1a: return this.ldrr("A", "(DE)"); 
+			case 0xfa: return this.ldrnn("A", "(nn)"); 
+			case 0x02: return this.ldrr("(BC)", "A"); 
+			case 0x12: return this.ldrr("(DE)", "A"); 
+			case 0xea: return this.ldnnr("(nn)", "A"); 
+			case 0xf2: return this.ldalp("C"); 
+			case 0xe2: return this.ldlpa("C"); 
+			case 0xe0: return this.ldalp("n"); 
+			case 0xf0: return this.ldlpa("n"); 
+			case 0x3a: return this.ldd("A", "(HL)"); 
+			case 0x32: return this.ldd("(HL)", "A"); 
+			case 0x2a: return this.ldi("A", "(HL)"); 
+			case 0x22: return this.ldi("(HL)", "A"); 
+			case 0x01: return this.ldrnn("BC", "nn"); 
+			case 0x11: return this.ldrnn("DE", "nn"); 
+			case 0x21: return this.ldrnn("HL", "nn"); 
+			case 0x31: return this.ldrnn("SP", "nn"); 
+			case 0xf9: return this.ldrr("SP", "HL"); 
+			case 0xf8: return this.ldhl(); 
+			case 0x08: return this.ldrnn("SP", "nn"); 
+			case 0xf5: return this.push("AF"); 
+			case 0xc5: return this.push("BC"); 
+			case 0xd5: return this.push("DE"); 
+			case 0xe5: return this.push("HL"); 
+			case 0xf1: return this.pop("AF"); 
+			case 0xc1: return this.pop("BC"); 
+			case 0xd1: return this.pop("DE"); 
+			case 0xe1: return this.pop("HL"); 
+			case 0x87: return this.add("A"); 
+			case 0x80: return this.add("B"); 
+			case 0x81: return this.add("C"); 
+			case 0x82: return this.add("D"); 
+			case 0x83: return this.add("E"); 
+			case 0x84: return this.add("H"); 
+			case 0x85: return this.add("L"); 
+			case 0x86: return this.add("(HL)"); 
+			case 0xc6: return this.addn("n"); 
+			case 0x8f: return this.add("A", true); 
+			case 0x88: return this.add("B", true); 
+			case 0x89: return this.add("C", true); 
+			case 0x8a: return this.add("D", true); 
+			case 0x8b: return this.add("E", true); 
+			case 0x8c: return this.add("H", true); 
+			case 0x8d: return this.add("L", true); 
+			case 0x8e: return this.add("(HL)", true); 
+			case 0xce: return this.addn("n", true); 
+			case 0x97: return this.sub("A"); 
+			case 0x90: return this.sub("B"); 
+			case 0x91: return this.sub("C"); 
+			case 0x92: return this.sub("D"); 
+			case 0x93: return this.sub("E"); 
+			case 0x94: return this.sub("H"); 
+			case 0x95: return this.sub("L"); 
+			case 0x96: return this.sub("(HL)"); 
+			case 0xd6: return this.subn("n"); 
+			case 0x9f: return this.sub("A", true); 
+			case 0x98: return this.sub("B", true); 
+			case 0x99: return this.sub("C", true); 
+			case 0x9a: return this.sub("D", true); 
+			case 0x9b: return this.sub("E", true); 
+			case 0x9c: return this.sub("H", true); 
+			case 0x9d: return this.sub("L", true); 
+			case 0x9e: return this.sub("(HL)", true); 
+			case 0xde: return this.subn("n", true); 
+			case 0xa7: return this.and("A"); 
+			case 0xa0: return this.and("B"); 
+			case 0xa1: return this.and("C"); 
+			case 0xa2: return this.and("D"); 
+			case 0xa3: return this.and("E"); 
+			case 0xa4: return this.and("H"); 
+			case 0xa5: return this.and("L"); 
+			case 0xa6: return this.and("(HL)"); 
+			case 0xe6: return this.andn("n"); 
+			case 0xb7: return this.or("A"); 
+			case 0xb0: return this.or("B"); 
+			case 0xb1: return this.or("C"); 
+			case 0xb2: return this.or("D"); 
+			case 0xb3: return this.or("E"); 
+			case 0xb4: return this.or("H"); 
+			case 0xb5: return this.or("L"); 
+			case 0xb6: return this.or("(HL)"); 
+			case 0xf6: return this.orn("n"); 
+			case 0xaf: return this.xor("A"); 
+			case 0xa8: return this.xor("B"); 
+			case 0xa9: return this.xor("C"); 
+			case 0xaa: return this.xor("D"); 
+			case 0xab: return this.xor("E"); 
+			case 0xac: return this.xor("H"); 
+			case 0xad: return this.xor("L"); 
+			case 0xae: return this.xor("(HL)"); 
+			case 0xee: return this.xorn("n"); 
+			case 0xbf: return this.cp("A"); 
+			case 0xb8: return this.cp("B"); 
+			case 0xb9: return this.cp("C"); 
+			case 0xba: return this.cp("D"); 
+			case 0xbb: return this.cp("E"); 
+			case 0xbc: return this.cp("H"); 
+			case 0xbd: return this.cp("L"); 
+			case 0xbe: return this.cp("(HL)"); 
+			case 0xfe: return this.cpn("n"); 
+			case 0x3c: return this.inc("A"); 
+			case 0x04: return this.inc("B"); 
+			case 0x0c: return this.inc("C"); 
+			case 0x14: return this.inc("D"); 
+			case 0x1c: return this.inc("E"); 
+			case 0x24: return this.inc("H"); 
+			case 0x2c: return this.inc("L"); 
+			case 0x34: return this.inc("(HL)"); 
+			case 0x3d: return this.dec("A"); 
+			case 0x05: return this.dec("B"); 
+			case 0x0d: return this.dec("C"); 
+			case 0x15: return this.dec("D"); 
+			case 0x1d: return this.dec("E"); 
+			case 0x25: return this.dec("H"); 
+			case 0x2d: return this.dec("L"); 
+			case 0x35: return this.dec("(HL)"); 
+			case 0x09: return this.add16("BC"); 
+			case 0x19: return this.add16("DE"); 
+			case 0x29: return this.add16("HL"); 
+			case 0x39: return this.add16("SP"); 
+			case 0xe8: return this.addsp(); 
+			case 0x03: return this.inc("BC"); 
+			case 0x13: return this.inc("DE"); 
+			case 0x23: return this.inc("HL"); 
+			case 0x33: return this.inc("SP"); 
+			case 0x0b: return this.dec("BC"); 
+			case 0x1b: return this.dec("DE"); 
+			case 0x2b: return this.dec("HL"); 
+			case 0x3b: return this.dec("SP"); 
+			case 0x27: return this.daa(); 
+			case 0x2f: return this.cpl(); 
+			case 0x3f: return this.ccf(); 
+			case 0x37: return this.scf(); 
+			case 0x76: return this.halt(); 
+			case 0x10: return this.stop(); 
+			case 0xf3: return this.inte(false); 
+			case 0xfb: return this.inte(true); 
+			case 0x07: return this.rla(false); 
+			case 0x17: return this.rla(true); 
+			case 0x0f: return this.rra(false); 
+			case 0x1f: return this.rra(true); 
+			case 0xc3: return this.jpnn(); 
+			case 0xc2: return this.jpc("NZ"); 
+			case 0xca: return this.jpc("Z"); 
+			case 0xd2: return this.jpc("NC"); 
+			case 0xda: return this.jpc("C"); 
+			case 0xe9: return this.jphl(); 
+			case 0x18: return this.jpr(); 
+			case 0x20: return this.jprc("NZ"); 
+			case 0x28: return this.jprc("Z"); 
+			case 0x30: return this.jprc("NC"); 
+			case 0x38: return this.jprc("C"); 
+			case 0xcd: return this.call(); 
+			case 0xc4: return this.callc("NZ"); 
+			case 0xcc: return this.callc("Z"); 
+			case 0xd4: return this.callc("NC"); 
+			case 0xdc: return this.callc("C"); 
+			case 0xc7: return this.rst(0x00); 
+			case 0xcf: return this.rst(0x08); 
+			case 0xd7: return this.rst(0x10); 
+			case 0xdf: return this.rst(0x18); 
+			case 0xe7: return this.rst(0x20); 
+			case 0xef: return this.rst(0x28); 
+			case 0xf7: return this.rst(0x30); 
+			case 0xff: return this.rst(0x38); 
+			case 0xc9: return this.ret(false); 
+			case 0xd9: return this.ret(true); 
+			case 0xc0: return this.retc("NZ"); 
+			case 0xc8: return this.retc("Z"); 
+			case 0xd0: return this.retc("NC"); 
+			case 0xd8: return this.retc("C"); 
+			case 0xcb: return this.c6bit(); 
+			default: return this.unknown(); 
 		}
 	}
 	
@@ -255,732 +264,521 @@ public class Disassembler {
 		System.out.println("Unknown Opcode: " + Utils.toHex(opcode));
 	}
 	
-	public void c6bit() {
-		int opcode = cpu.getNext();
+	public String c6bit() {
+		int opcode = cpu.getMemory().read(cpu.getProgramCounter() + 1);
 		switch (opcode) {
-			case 0x37: this.swap("A"); break;
-			case 0x30: this.swap("B"); break;
-			case 0x31: this.swap("C"); break;
-			case 0x32: this.swap("D"); break;
-			case 0x33: this.swap("E"); break;
-			case 0x34: this.swap("H"); break;
-			case 0x35: this.swap("L"); break;
-			case 0x36: this.swap("(HL)"); break;
-			case 0x07: this.rl("A", false); break;
-			case 0x00: this.rl("B", false); break;
-			case 0x01: this.rl("C", false); break;
-			case 0x02: this.rl("D", false); break;
-			case 0x03: this.rl("E", false); break;
-			case 0x04: this.rl("H", false); break;
-			case 0x05: this.rl("L", false); break;
-			case 0x06: this.rl("(HL)", false); break;
-			case 0x17: this.rl("A", true); break;
-			case 0x10: this.rl("B", true); break;
-			case 0x11: this.rl("C", true); break;
-			case 0x12: this.rl("D", true); break;
-			case 0x13: this.rl("E", true); break;
-			case 0x14: this.rl("H", true); break;
-			case 0x15: this.rl("L", true); break;
-			case 0x16: this.rl("(HL)", true); break;
-			case 0x0f: this.rr("A", false); break;
-			case 0x08: this.rr("B", false); break;
-			case 0x09: this.rr("C", false); break;
-			case 0x0a: this.rr("D", false); break;
-			case 0x0b: this.rr("E", false); break;
-			case 0x0c: this.rr("H", false); break;
-			case 0x0d: this.rr("L", false); break;
-			case 0x0e: this.rr("(HL)", false); break;
-			case 0x1f: this.rr("A", true); break;
-			case 0x18: this.rr("B", true); break;
-			case 0x19: this.rr("C", true); break;
-			case 0x1a: this.rr("D", true); break;
-			case 0x1b: this.rr("E", true); break;
-			case 0x1c: this.rr("H", true); break;
-			case 0x1d: this.rr("L", true); break;
-			case 0x1e: this.rr("(HL)", true); break;
-			case 0x27: this.sl("A"); break;
-			case 0x20: this.sl("B"); break;
-			case 0x21: this.sl("C"); break;
-			case 0x22: this.sl("D"); break;
-			case 0x23: this.sl("E"); break;
-			case 0x24: this.sl("H"); break;
-			case 0x25: this.sl("L"); break;
-			case 0x26: this.sl("(HL)"); break;
-			case 0x2f: this.sr("A", false); break;
-			case 0x28: this.sr("B", false); break;
-			case 0x29: this.sr("C", false); break;
-			case 0x2a: this.sr("D", false); break;
-			case 0x2b: this.sr("E", false); break;
-			case 0x2c: this.sr("H", false); break;
-			case 0x2d: this.sr("L", false); break;
-			case 0x2e: this.sr("(HL)", false); break;
-			case 0x3f: this.sr("A", true); break;
-			case 0x38: this.sr("B", true); break;
-			case 0x39: this.sr("C", true); break;
-			case 0x3a: this.sr("D", true); break;
-			case 0x3b: this.sr("E", true); break;
-			case 0x3c: this.sr("H", true); break;
-			case 0x3d: this.sr("L", true); break;
-			case 0x3e: this.sr("(HL)", true); break;
-			case 0x47: this.bit(0, "A"); break;
-			case 0x40: this.bit(0, "B"); break;
-			case 0x41: this.bit(0, "C"); break;
-			case 0x42: this.bit(0, "D"); break;
-			case 0x43: this.bit(0, "E"); break;
-			case 0x44: this.bit(0, "H"); break;
-			case 0x45: this.bit(0, "L"); break;
-			case 0x46: this.bit(0, "(HL)"); break;
-			case 0x4f: this.bit(1, "A"); break;
-			case 0x48: this.bit(1, "B"); break;
-			case 0x49: this.bit(1, "C"); break;
-			case 0x4a: this.bit(1, "D"); break;
-			case 0x4b: this.bit(1, "E"); break;
-			case 0x4c: this.bit(1, "H"); break;
-			case 0x4d: this.bit(1, "L"); break;
-			case 0x4e: this.bit(1, "(HL)"); break;
-			case 0x57: this.bit(2, "A"); break;
-			case 0x50: this.bit(2, "B"); break;
-			case 0x51: this.bit(2, "C"); break;
-			case 0x52: this.bit(2, "D"); break;
-			case 0x53: this.bit(2, "E"); break;
-			case 0x54: this.bit(2, "H"); break;
-			case 0x55: this.bit(2, "L"); break;
-			case 0x56: this.bit(2, "(HL)"); break;
-			case 0x5f: this.bit(3, "A"); break;
-			case 0x58: this.bit(3, "B"); break;
-			case 0x59: this.bit(3, "C"); break;
-			case 0x5a: this.bit(3, "D"); break;
-			case 0x5b: this.bit(3, "E"); break;
-			case 0x5c: this.bit(3, "H"); break;
-			case 0x5d: this.bit(3, "L"); break;
-			case 0x5e: this.bit(3, "(HL)"); break;
-			case 0x67: this.bit(4, "A"); break;
-			case 0x60: this.bit(4, "B"); break;
-			case 0x61: this.bit(4, "C"); break;
-			case 0x62: this.bit(4, "D"); break;
-			case 0x63: this.bit(4, "E"); break;
-			case 0x64: this.bit(4, "H"); break;
-			case 0x65: this.bit(4, "L"); break;
-			case 0x66: this.bit(4, "(HL)"); break;
-			case 0x6f: this.bit(5, "A"); break;
-			case 0x68: this.bit(5, "B"); break;
-			case 0x69: this.bit(5, "C"); break;
-			case 0x6a: this.bit(5, "D"); break;
-			case 0x6b: this.bit(5, "E"); break;
-			case 0x6c: this.bit(5, "H"); break;
-			case 0x6d: this.bit(5, "L"); break;
-			case 0x6e: this.bit(5, "(HL)"); break;
-			case 0x77: this.bit(6, "A"); break;
-			case 0x70: this.bit(6, "B"); break;
-			case 0x71: this.bit(6, "C"); break;
-			case 0x72: this.bit(6, "D"); break;
-			case 0x73: this.bit(6, "E"); break;
-			case 0x74: this.bit(6, "H"); break;
-			case 0x75: this.bit(6, "L"); break;
-			case 0x76: this.bit(6, "(HL)"); break;
-			case 0x7f: this.bit(7, "A"); break;
-			case 0x78: this.bit(7, "B"); break;
-			case 0x79: this.bit(7, "C"); break;
-			case 0x7a: this.bit(7, "D"); break;
-			case 0x7b: this.bit(7, "E"); break;
-			case 0x7c: this.bit(7, "H"); break;
-			case 0x7d: this.bit(7, "L"); break;
-			case 0x7e: this.bit(7, "(HL)"); break;
-			case 0xc7: this.set(0, "A"); break;
-			case 0xc0: this.set(0, "B"); break;
-			case 0xc1: this.set(0, "C"); break;
-			case 0xc2: this.set(0, "D"); break;
-			case 0xc3: this.set(0, "E"); break;
-			case 0xc4: this.set(0, "H"); break;
-			case 0xc5: this.set(0, "L"); break;
-			case 0xc6: this.set(0, "(HL)"); break;
-			case 0xcf: this.set(1, "A"); break;
-			case 0xc8: this.set(1, "B"); break;
-			case 0xc9: this.set(1, "C"); break;
-			case 0xca: this.set(1, "D"); break;
-			case 0xcb: this.set(1, "E"); break;
-			case 0xcc: this.set(1, "H"); break;
-			case 0xcd: this.set(1, "L"); break;
-			case 0xce: this.set(1, "(HL)"); break;
-			case 0xd7: this.set(2, "A"); break;
-			case 0xd0: this.set(2, "B"); break;
-			case 0xd1: this.set(2, "C"); break;
-			case 0xd2: this.set(2, "D"); break;
-			case 0xd3: this.set(2, "E"); break;
-			case 0xd4: this.set(2, "H"); break;
-			case 0xd5: this.set(2, "L"); break;
-			case 0xd6: this.set(2, "(HL)"); break;
-			case 0xdf: this.set(3, "A"); break;
-			case 0xd8: this.set(3, "B"); break;
-			case 0xd9: this.set(3, "C"); break;
-			case 0xda: this.set(3, "D"); break;
-			case 0xdb: this.set(3, "E"); break;
-			case 0xdc: this.set(3, "H"); break;
-			case 0xdd: this.set(3, "L"); break;
-			case 0xde: this.set(3, "(HL)"); break;
-			case 0xe7: this.set(4, "A"); break;
-			case 0xe0: this.set(4, "B"); break;
-			case 0xe1: this.set(4, "C"); break;
-			case 0xe2: this.set(4, "D"); break;
-			case 0xe3: this.set(4, "E"); break;
-			case 0xe4: this.set(4, "H"); break;
-			case 0xe5: this.set(4, "L"); break;
-			case 0xe6: this.set(4, "(HL)"); break;
-			case 0xef: this.set(5, "A"); break;
-			case 0xe8: this.set(5, "B"); break;
-			case 0xe9: this.set(5, "C"); break;
-			case 0xea: this.set(5, "D"); break;
-			case 0xeb: this.set(5, "E"); break;
-			case 0xec: this.set(5, "H"); break;
-			case 0xed: this.set(5, "L"); break;
-			case 0xee: this.set(5, "(HL)"); break;
-			case 0xf7: this.set(6, "A"); break;
-			case 0xf0: this.set(6, "B"); break;
-			case 0xf1: this.set(6, "C"); break;
-			case 0xf2: this.set(6, "D"); break;
-			case 0xf3: this.set(6, "E"); break;
-			case 0xf4: this.set(6, "H"); break;
-			case 0xf5: this.set(6, "L"); break;
-			case 0xf6: this.set(6, "(HL)"); break;
-			case 0xff: this.set(7, "A"); break;
-			case 0xf8: this.set(7, "B"); break;
-			case 0xf9: this.set(7, "C"); break;
-			case 0xfa: this.set(7, "D"); break;
-			case 0xfb: this.set(7, "E"); break;
-			case 0xfc: this.set(7, "H"); break;
-			case 0xfd: this.set(7, "L"); break;
-			case 0xfe: this.set(7, "(HL)"); break;
-			case 0x87: this.res(0, "A"); break;
-			case 0x80: this.res(0, "B"); break;
-			case 0x81: this.res(0, "C"); break;
-			case 0x82: this.res(0, "D"); break;
-			case 0x83: this.res(0, "E"); break;
-			case 0x84: this.res(0, "H"); break;
-			case 0x85: this.res(0, "L"); break;
-			case 0x86: this.res(0, "(HL)"); break;
-			case 0x8f: this.res(1, "A"); break;
-			case 0x88: this.res(1, "B"); break;
-			case 0x89: this.res(1, "C"); break;
-			case 0x8a: this.res(1, "D"); break;
-			case 0x8b: this.res(1, "E"); break;
-			case 0x8c: this.res(1, "H"); break;
-			case 0x8d: this.res(1, "L"); break;
-			case 0x8e: this.res(1, "(HL)"); break;
-			case 0x97: this.res(2, "A"); break;
-			case 0x90: this.res(2, "B"); break;
-			case 0x91: this.res(2, "C"); break;
-			case 0x92: this.res(2, "D"); break;
-			case 0x93: this.res(2, "E"); break;
-			case 0x94: this.res(2, "H"); break;
-			case 0x95: this.res(2, "L"); break;
-			case 0x96: this.res(2, "(HL)"); break;
-			case 0x9f: this.res(3, "A"); break;
-			case 0x98: this.res(3, "B"); break;
-			case 0x99: this.res(3, "C"); break;
-			case 0x9a: this.res(3, "D"); break;
-			case 0x9b: this.res(3, "E"); break;
-			case 0x9c: this.res(3, "H"); break;
-			case 0x9d: this.res(3, "L"); break;
-			case 0x9e: this.res(3, "(HL)"); break;
-			case 0xa7: this.res(4, "A"); break;
-			case 0xa0: this.res(4, "B"); break;
-			case 0xa1: this.res(4, "C"); break;
-			case 0xa2: this.res(4, "D"); break;
-			case 0xa3: this.res(4, "E"); break;
-			case 0xa4: this.res(4, "H"); break;
-			case 0xa5: this.res(4, "L"); break;
-			case 0xa6: this.res(4, "(HL)"); break;
-			case 0xaf: this.res(5, "A"); break;
-			case 0xa8: this.res(5, "B"); break;
-			case 0xa9: this.res(5, "C"); break;
-			case 0xaa: this.res(5, "D"); break;
-			case 0xab: this.res(5, "E"); break;
-			case 0xac: this.res(5, "H"); break;
-			case 0xad: this.res(5, "L"); break;
-			case 0xae: this.res(5, "(HL)"); break;
-			case 0xb7: this.res(6, "A"); break;
-			case 0xb0: this.res(6, "B"); break;
-			case 0xb1: this.res(6, "C"); break;
-			case 0xb2: this.res(6, "D"); break;
-			case 0xb3: this.res(6, "E"); break;
-			case 0xb4: this.res(6, "H"); break;
-			case 0xb5: this.res(6, "L"); break;
-			case 0xb6: this.res(6, "(HL)"); break;
-			case 0xbf: this.res(7, "A"); break;
-			case 0xb8: this.res(7, "B"); break;
-			case 0xb9: this.res(7, "C"); break;
-			case 0xba: this.res(7, "D"); break;
-			case 0xbb: this.res(7, "E"); break;
-			case 0xbc: this.res(7, "H"); break;
-			case 0xbd: this.res(7, "L"); break;
-			case 0xbe: this.res(7, "(HL)"); break;
-			default: this.unknown(opcode + 51968); break;
+			case 0x37: return this.swap("A"); 
+			case 0x30: return this.swap("B"); 
+			case 0x31: return this.swap("C"); 
+			case 0x32: return this.swap("D"); 
+			case 0x33: return this.swap("E"); 
+			case 0x34: return this.swap("H"); 
+			case 0x35: return this.swap("L"); 
+			case 0x36: return this.swap("(HL)"); 
+			case 0x07: return this.rl("A", false); 
+			case 0x00: return this.rl("B", false); 
+			case 0x01: return this.rl("C", false); 
+			case 0x02: return this.rl("D", false); 
+			case 0x03: return this.rl("E", false); 
+			case 0x04: return this.rl("H", false); 
+			case 0x05: return this.rl("L", false); 
+			case 0x06: return this.rl("(HL)", false); 
+			case 0x17: return this.rl("A", true); 
+			case 0x10: return this.rl("B", true); 
+			case 0x11: return this.rl("C", true); 
+			case 0x12: return this.rl("D", true); 
+			case 0x13: return this.rl("E", true); 
+			case 0x14: return this.rl("H", true); 
+			case 0x15: return this.rl("L", true); 
+			case 0x16: return this.rl("(HL)", true); 
+			case 0x0f: return this.rr("A", false); 
+			case 0x08: return this.rr("B", false); 
+			case 0x09: return this.rr("C", false); 
+			case 0x0a: return this.rr("D", false); 
+			case 0x0b: return this.rr("E", false); 
+			case 0x0c: return this.rr("H", false); 
+			case 0x0d: return this.rr("L", false); 
+			case 0x0e: return this.rr("(HL)", false); 
+			case 0x1f: return this.rr("A", true); 
+			case 0x18: return this.rr("B", true); 
+			case 0x19: return this.rr("C", true); 
+			case 0x1a: return this.rr("D", true); 
+			case 0x1b: return this.rr("E", true); 
+			case 0x1c: return this.rr("H", true); 
+			case 0x1d: return this.rr("L", true); 
+			case 0x1e: return this.rr("(HL)", true); 
+			case 0x27: return this.sl("A"); 
+			case 0x20: return this.sl("B"); 
+			case 0x21: return this.sl("C"); 
+			case 0x22: return this.sl("D"); 
+			case 0x23: return this.sl("E"); 
+			case 0x24: return this.sl("H"); 
+			case 0x25: return this.sl("L"); 
+			case 0x26: return this.sl("(HL)"); 
+			case 0x2f: return this.sr("A", false); 
+			case 0x28: return this.sr("B", false); 
+			case 0x29: return this.sr("C", false); 
+			case 0x2a: return this.sr("D", false); 
+			case 0x2b: return this.sr("E", false); 
+			case 0x2c: return this.sr("H", false); 
+			case 0x2d: return this.sr("L", false); 
+			case 0x2e: return this.sr("(HL)", false); 
+			case 0x3f: return this.sr("A", true); 
+			case 0x38: return this.sr("B", true); 
+			case 0x39: return this.sr("C", true); 
+			case 0x3a: return this.sr("D", true); 
+			case 0x3b: return this.sr("E", true); 
+			case 0x3c: return this.sr("H", true); 
+			case 0x3d: return this.sr("L", true); 
+			case 0x3e: return this.sr("(HL)", true); 
+			case 0x47: return this.bit(0, "A"); 
+			case 0x40: return this.bit(0, "B"); 
+			case 0x41: return this.bit(0, "C"); 
+			case 0x42: return this.bit(0, "D"); 
+			case 0x43: return this.bit(0, "E"); 
+			case 0x44: return this.bit(0, "H"); 
+			case 0x45: return this.bit(0, "L"); 
+			case 0x46: return this.bit(0, "(HL)"); 
+			case 0x4f: return this.bit(1, "A"); 
+			case 0x48: return this.bit(1, "B"); 
+			case 0x49: return this.bit(1, "C"); 
+			case 0x4a: return this.bit(1, "D"); 
+			case 0x4b: return this.bit(1, "E"); 
+			case 0x4c: return this.bit(1, "H"); 
+			case 0x4d: return this.bit(1, "L"); 
+			case 0x4e: return this.bit(1, "(HL)"); 
+			case 0x57: return this.bit(2, "A"); 
+			case 0x50: return this.bit(2, "B"); 
+			case 0x51: return this.bit(2, "C"); 
+			case 0x52: return this.bit(2, "D"); 
+			case 0x53: return this.bit(2, "E"); 
+			case 0x54: return this.bit(2, "H"); 
+			case 0x55: return this.bit(2, "L"); 
+			case 0x56: return this.bit(2, "(HL)"); 
+			case 0x5f: return this.bit(3, "A"); 
+			case 0x58: return this.bit(3, "B"); 
+			case 0x59: return this.bit(3, "C"); 
+			case 0x5a: return this.bit(3, "D"); 
+			case 0x5b: return this.bit(3, "E"); 
+			case 0x5c: return this.bit(3, "H"); 
+			case 0x5d: return this.bit(3, "L"); 
+			case 0x5e: return this.bit(3, "(HL)"); 
+			case 0x67: return this.bit(4, "A"); 
+			case 0x60: return this.bit(4, "B"); 
+			case 0x61: return this.bit(4, "C"); 
+			case 0x62: return this.bit(4, "D"); 
+			case 0x63: return this.bit(4, "E"); 
+			case 0x64: return this.bit(4, "H"); 
+			case 0x65: return this.bit(4, "L"); 
+			case 0x66: return this.bit(4, "(HL)"); 
+			case 0x6f: return this.bit(5, "A"); 
+			case 0x68: return this.bit(5, "B"); 
+			case 0x69: return this.bit(5, "C"); 
+			case 0x6a: return this.bit(5, "D"); 
+			case 0x6b: return this.bit(5, "E"); 
+			case 0x6c: return this.bit(5, "H"); 
+			case 0x6d: return this.bit(5, "L"); 
+			case 0x6e: return this.bit(5, "(HL)"); 
+			case 0x77: return this.bit(6, "A"); 
+			case 0x70: return this.bit(6, "B"); 
+			case 0x71: return this.bit(6, "C"); 
+			case 0x72: return this.bit(6, "D"); 
+			case 0x73: return this.bit(6, "E"); 
+			case 0x74: return this.bit(6, "H"); 
+			case 0x75: return this.bit(6, "L"); 
+			case 0x76: return this.bit(6, "(HL)"); 
+			case 0x7f: return this.bit(7, "A"); 
+			case 0x78: return this.bit(7, "B"); 
+			case 0x79: return this.bit(7, "C"); 
+			case 0x7a: return this.bit(7, "D"); 
+			case 0x7b: return this.bit(7, "E"); 
+			case 0x7c: return this.bit(7, "H"); 
+			case 0x7d: return this.bit(7, "L"); 
+			case 0x7e: return this.bit(7, "(HL)"); 
+			case 0xc7: return this.set(0, "A"); 
+			case 0xc0: return this.set(0, "B"); 
+			case 0xc1: return this.set(0, "C"); 
+			case 0xc2: return this.set(0, "D"); 
+			case 0xc3: return this.set(0, "E"); 
+			case 0xc4: return this.set(0, "H"); 
+			case 0xc5: return this.set(0, "L"); 
+			case 0xc6: return this.set(0, "(HL)"); 
+			case 0xcf: return this.set(1, "A"); 
+			case 0xc8: return this.set(1, "B"); 
+			case 0xc9: return this.set(1, "C"); 
+			case 0xca: return this.set(1, "D"); 
+			case 0xcb: return this.set(1, "E"); 
+			case 0xcc: return this.set(1, "H"); 
+			case 0xcd: return this.set(1, "L"); 
+			case 0xce: return this.set(1, "(HL)"); 
+			case 0xd7: return this.set(2, "A"); 
+			case 0xd0: return this.set(2, "B"); 
+			case 0xd1: return this.set(2, "C"); 
+			case 0xd2: return this.set(2, "D"); 
+			case 0xd3: return this.set(2, "E"); 
+			case 0xd4: return this.set(2, "H"); 
+			case 0xd5: return this.set(2, "L"); 
+			case 0xd6: return this.set(2, "(HL)"); 
+			case 0xdf: return this.set(3, "A"); 
+			case 0xd8: return this.set(3, "B"); 
+			case 0xd9: return this.set(3, "C"); 
+			case 0xda: return this.set(3, "D"); 
+			case 0xdb: return this.set(3, "E"); 
+			case 0xdc: return this.set(3, "H"); 
+			case 0xdd: return this.set(3, "L"); 
+			case 0xde: return this.set(3, "(HL)"); 
+			case 0xe7: return this.set(4, "A"); 
+			case 0xe0: return this.set(4, "B"); 
+			case 0xe1: return this.set(4, "C"); 
+			case 0xe2: return this.set(4, "D"); 
+			case 0xe3: return this.set(4, "E"); 
+			case 0xe4: return this.set(4, "H"); 
+			case 0xe5: return this.set(4, "L"); 
+			case 0xe6: return this.set(4, "(HL)"); 
+			case 0xef: return this.set(5, "A"); 
+			case 0xe8: return this.set(5, "B"); 
+			case 0xe9: return this.set(5, "C"); 
+			case 0xea: return this.set(5, "D"); 
+			case 0xeb: return this.set(5, "E"); 
+			case 0xec: return this.set(5, "H"); 
+			case 0xed: return this.set(5, "L"); 
+			case 0xee: return this.set(5, "(HL)"); 
+			case 0xf7: return this.set(6, "A"); 
+			case 0xf0: return this.set(6, "B"); 
+			case 0xf1: return this.set(6, "C"); 
+			case 0xf2: return this.set(6, "D"); 
+			case 0xf3: return this.set(6, "E"); 
+			case 0xf4: return this.set(6, "H"); 
+			case 0xf5: return this.set(6, "L"); 
+			case 0xf6: return this.set(6, "(HL)"); 
+			case 0xff: return this.set(7, "A"); 
+			case 0xf8: return this.set(7, "B"); 
+			case 0xf9: return this.set(7, "C"); 
+			case 0xfa: return this.set(7, "D"); 
+			case 0xfb: return this.set(7, "E"); 
+			case 0xfc: return this.set(7, "H"); 
+			case 0xfd: return this.set(7, "L"); 
+			case 0xfe: return this.set(7, "(HL)"); 
+			case 0x87: return this.res(0, "A"); 
+			case 0x80: return this.res(0, "B"); 
+			case 0x81: return this.res(0, "C"); 
+			case 0x82: return this.res(0, "D"); 
+			case 0x83: return this.res(0, "E"); 
+			case 0x84: return this.res(0, "H"); 
+			case 0x85: return this.res(0, "L"); 
+			case 0x86: return this.res(0, "(HL)"); 
+			case 0x8f: return this.res(1, "A"); 
+			case 0x88: return this.res(1, "B"); 
+			case 0x89: return this.res(1, "C"); 
+			case 0x8a: return this.res(1, "D"); 
+			case 0x8b: return this.res(1, "E"); 
+			case 0x8c: return this.res(1, "H"); 
+			case 0x8d: return this.res(1, "L"); 
+			case 0x8e: return this.res(1, "(HL)"); 
+			case 0x97: return this.res(2, "A"); 
+			case 0x90: return this.res(2, "B"); 
+			case 0x91: return this.res(2, "C"); 
+			case 0x92: return this.res(2, "D"); 
+			case 0x93: return this.res(2, "E"); 
+			case 0x94: return this.res(2, "H"); 
+			case 0x95: return this.res(2, "L"); 
+			case 0x96: return this.res(2, "(HL)"); 
+			case 0x9f: return this.res(3, "A"); 
+			case 0x98: return this.res(3, "B"); 
+			case 0x99: return this.res(3, "C"); 
+			case 0x9a: return this.res(3, "D"); 
+			case 0x9b: return this.res(3, "E"); 
+			case 0x9c: return this.res(3, "H"); 
+			case 0x9d: return this.res(3, "L"); 
+			case 0x9e: return this.res(3, "(HL)"); 
+			case 0xa7: return this.res(4, "A"); 
+			case 0xa0: return this.res(4, "B"); 
+			case 0xa1: return this.res(4, "C"); 
+			case 0xa2: return this.res(4, "D"); 
+			case 0xa3: return this.res(4, "E"); 
+			case 0xa4: return this.res(4, "H"); 
+			case 0xa5: return this.res(4, "L"); 
+			case 0xa6: return this.res(4, "(HL)"); 
+			case 0xaf: return this.res(5, "A"); 
+			case 0xa8: return this.res(5, "B"); 
+			case 0xa9: return this.res(5, "C"); 
+			case 0xaa: return this.res(5, "D"); 
+			case 0xab: return this.res(5, "E"); 
+			case 0xac: return this.res(5, "H"); 
+			case 0xad: return this.res(5, "L"); 
+			case 0xae: return this.res(5, "(HL)"); 
+			case 0xb7: return this.res(6, "A"); 
+			case 0xb0: return this.res(6, "B"); 
+			case 0xb1: return this.res(6, "C"); 
+			case 0xb2: return this.res(6, "D"); 
+			case 0xb3: return this.res(6, "E"); 
+			case 0xb4: return this.res(6, "H"); 
+			case 0xb5: return this.res(6, "L"); 
+			case 0xb6: return this.res(6, "(HL)"); 
+			case 0xbf: return this.res(7, "A"); 
+			case 0xb8: return this.res(7, "B"); 
+			case 0xb9: return this.res(7, "C"); 
+			case 0xba: return this.res(7, "D"); 
+			case 0xbb: return this.res(7, "E"); 
+			case 0xbc: return this.res(7, "H"); 
+			case 0xbd: return this.res(7, "L"); 
+			case 0xbe: return this.res(7, "(HL)"); 
+			default: return this.unknown(); 
 		}
 	}
 	
-	public String ldn(String register) {
-		return "LD " + register + " " + this.getRegister("n");
+	private String unknown() {
+		return "XXX";
 	}
 	
-	public String ldrr(String register1, String register2) {
-		return "LD " + register1 + " " + register2;
+	private String nop() {
+		return "NOP";
 	}
 	
-	public void ldalp(String offsetRegister) {
-		this.setRegister("A", cpu.getMemory().read(0xff00 + this.getRegister(offsetRegister)));
+	private String ldn(String register) {
+		return String.format("LD %s, %s", register, Utils.toHex(cpu.getMemory().read(cpu.getProgramCounter() + 1)));
 	}
 	
-	public void ldlpa(String offsetRegister) {
-		cpu.getMemory().write(0xff00 + this.getRegister(offsetRegister), this.getRegister("A"));
+	private String ldrr(String register1, String register2) {
+		return String.format("LD %s, %s", register1, register2);
 	}
 	
-	public void ldd(String register1, String register2) {
-		this.ldrr(register1, register2);
-		cpu.getRegisterHL().setRegister(cpu.getRegisterHL().getRegister() - 1);
+	private String ldrn(String register1, String register2) {
+		return this.ldn(register1);
 	}
 	
-	public void ldi(String register1, String register2) {
-		this.ldrr(register1, register2);
-		cpu.getRegisterHL().setRegister(cpu.getRegisterHL().getRegister() + 1);
+	private String ldrnn(String register1, String register2) {
+		return String.format("LD %s, %s", register1, Utils.toHex(Utils.covert8to16(cpu.getMemory().read(cpu.getProgramCounter() + 1), cpu.getMemory().read(cpu.getProgramCounter() + 2))));
 	}
 	
-	public void ldhl() {
-		int sByte = cpu.getNext();
-		if ((sByte & 0x80) == 0x80) sByte -= 256;
-		
-		int address = cpu.getStackPointer() + sByte;
-		
-		cpu.getRegisterPSW().setFlag(PSWRegister.CARRY_FLAG, (address > 0xffff || address < 0x0000));
-		cpu.getRegisterPSW().setFlag(PSWRegister.HALF_CARRY_FLAG, (address & 0xff) + sByte > 0xff);
-		cpu.getRegisterPSW().setFlag(PSWRegister.ZERO_FLAG, false);
-		cpu.getRegisterPSW().setFlag(PSWRegister.SUBTRACT_FLAG, false);
-		
-		if (address > 0xffff) address -= 0xffff;
-		if (address < 0x0000) address += 0xffff;
-		
-		this.setRegister("HL", address);
+	private String ldnnr(String register1, String register2) {
+		return String.format("LD %s, %s", Utils.toHex(Utils.covert8to16(cpu.getMemory().read(cpu.getProgramCounter() + 1), cpu.getMemory().read(cpu.getProgramCounter() + 2))), register1);
 	}
 	
-	public void push(String register) {
-		cpu.getMemory().write(cpu.getStackPointer(), this.getRegister(register) >> 8);
-		cpu.getMemory().write(cpu.getStackPointer() - 1, this.getRegister(register) & 0xff);
-		cpu.setStackPointer(cpu.getStackPointer() - 2);
+	private String ldalp(String register) {
+		if (register == "n") return String.format("LD A, ($FF00 + %s)", Utils.toHex(cpu.getMemory().read(cpu.getProgramCounter() + 1)));
+		return "LD A, ($FF00 + C)";
 	}
 	
-	public void pop(String register) {
-		cpu.setStackPointer(cpu.getStackPointer() + 2);
-		this.setRegister(register, cpu.getMemory().read((cpu.getStackPointer()) << 8) | (cpu.getStackPointer() - 1 & 0xff));
+	private String ldlpa(String register) {
+		if (register == "n") return String.format("LD ($FF00 + %s), A", Utils.toHex(cpu.getMemory().read(cpu.getProgramCounter() + 1)));
+		return "LD ($FF00 + C), A";
 	}
 	
-	public void add(String register) {
-		this.add(register, false);
+	private String ldd(String register1, String register2) {
+		if (register1 == "A") return "LD A, (HL-)";
+		return "LD (HL-), A";
 	}
 	
-	public void add(String register, boolean withCarry) {
-		int addition = this.getRegister("A") + this.getRegister(register) + ((withCarry) ? 1 : 0);
-		
-		cpu.getRegisterPSW().setFlag(PSWRegister.CARRY_FLAG, addition > 255);
-		cpu.getRegisterPSW().setFlag(PSWRegister.HALF_CARRY_FLAG, addition > 15);
-		cpu.getRegisterPSW().setFlag(PSWRegister.ZERO_FLAG, addition == 0);
-		cpu.getRegisterPSW().setFlag(PSWRegister.SUBTRACT_FLAG, false);
-		
-		if (addition > 255) addition -= 256;
-		
-		this.setRegister("A", addition);
+	private String ldi(String register1, String register2) {
+		if (register1 == "A") return "LD A, (HL+)";
+		return "LD (HL+), A";
 	}
 	
-	public void sub(String register) {
-		this.sub(register, false);
+	private String ldhl() {
+		return "LD HL, SP + n";
 	}
 	
-	public void sub(String register, boolean withBorrow) {
-		int subtraction = this.getRegister("A") - this.getRegister(register) + ((withBorrow) ? 1 : 0);
-		
-		cpu.getRegisterPSW().setFlag(PSWRegister.CARRY_FLAG, subtraction > 0);
-		cpu.getRegisterPSW().setFlag(PSWRegister.HALF_CARRY_FLAG, subtraction > 15);
-		cpu.getRegisterPSW().setFlag(PSWRegister.ZERO_FLAG, subtraction == 0);
-		cpu.getRegisterPSW().setFlag(PSWRegister.SUBTRACT_FLAG, false);
-		
-		if (subtraction < 0) subtraction += 256;
-		
-		this.setRegister("A", subtraction);
+	private String push(String register) {
+		return String.format("PUSH %s", register);
 	}
 	
-	public void and(String register) {
-		int and = this.getRegister("A") & this.getRegister(register);
-		
-		cpu.getRegisterPSW().setFlag(PSWRegister.CARRY_FLAG, false);
-		cpu.getRegisterPSW().setFlag(PSWRegister.HALF_CARRY_FLAG, true);
-		cpu.getRegisterPSW().setFlag(PSWRegister.ZERO_FLAG, and == 0);
-		cpu.getRegisterPSW().setFlag(PSWRegister.SUBTRACT_FLAG, false);
-		
-		this.setRegister("A", and);
+	private String pop(String register) {
+		return String.format("POP %s", register);
 	}
 	
-	public void or(String register) {
-		int or = this.getRegister("A") | this.getRegister(register);
-		
-		cpu.getRegisterPSW().setFlag(PSWRegister.CARRY_FLAG, false);
-		cpu.getRegisterPSW().setFlag(PSWRegister.HALF_CARRY_FLAG, false);
-		cpu.getRegisterPSW().setFlag(PSWRegister.ZERO_FLAG, or == 0);
-		cpu.getRegisterPSW().setFlag(PSWRegister.SUBTRACT_FLAG, false);
-		
-		this.setRegister("A", or);
+	private String add(String register) {
+		return String.format("ADD A, %s", register);
 	}
 	
-	public void xor(String register) {
-		int xor = this.getRegister("A") ^ this.getRegister(register);
-		
-		cpu.getRegisterPSW().setFlag(PSWRegister.CARRY_FLAG, false);
-		cpu.getRegisterPSW().setFlag(PSWRegister.HALF_CARRY_FLAG, false);
-		cpu.getRegisterPSW().setFlag(PSWRegister.ZERO_FLAG, xor == 0);
-		cpu.getRegisterPSW().setFlag(PSWRegister.SUBTRACT_FLAG, false);
-		
-		this.setRegister("A", xor);
+	private String add(String register, boolean carry) {
+		return String.format("ADC A, %s", register);
 	}
 	
-	public void cp(String register) {
-		int compare = this.getRegister("A") - this.getRegister(register);
-		
-		cpu.getRegisterPSW().setFlag(PSWRegister.CARRY_FLAG, compare > 0);
-		cpu.getRegisterPSW().setFlag(PSWRegister.HALF_CARRY_FLAG, compare > 15);
-		cpu.getRegisterPSW().setFlag(PSWRegister.ZERO_FLAG, compare == 0);
-		cpu.getRegisterPSW().setFlag(PSWRegister.SUBTRACT_FLAG, false);
+	private String addn(String register) {
+		return String.format("ADD A, %s", Utils.toHex(cpu.getMemory().read(cpu.getProgramCounter() + 1)));
 	}
 	
-	public void inc(String register) {
-		int addition = this.getRegister(register) + 1;
-		
-		cpu.getRegisterPSW().setFlag(PSWRegister.CARRY_FLAG, addition > 255);
-		cpu.getRegisterPSW().setFlag(PSWRegister.HALF_CARRY_FLAG, addition > 15);
-		cpu.getRegisterPSW().setFlag(PSWRegister.ZERO_FLAG, addition == 0);
-		cpu.getRegisterPSW().setFlag(PSWRegister.SUBTRACT_FLAG, false);
-		
-		if (addition > 255) addition -= 256;
-		
-		this.setRegister(register, addition);
+	private String addn(String register, boolean carry) {
+		return String.format("ADC A, %s", Utils.toHex(cpu.getMemory().read(cpu.getProgramCounter() + 1)));
 	}
 	
-	public void dec(String register) {
-		int subtraction = this.getRegister(register) - 1;
-		
-		cpu.getRegisterPSW().setFlag(PSWRegister.CARRY_FLAG, subtraction > 0);
-		cpu.getRegisterPSW().setFlag(PSWRegister.HALF_CARRY_FLAG, subtraction > 15);
-		cpu.getRegisterPSW().setFlag(PSWRegister.ZERO_FLAG, subtraction == 0);
-		cpu.getRegisterPSW().setFlag(PSWRegister.SUBTRACT_FLAG, false);
-		
-		if (subtraction < 0) subtraction += 256;
-		
-		this.setRegister(register, subtraction);
+	private String sub(String register) {
+		return String.format("SUB A, %s", register);
 	}
 	
-	public void add16(String register2) {
-		int addition = this.getRegister("HL") + this.getRegister(register2);
-		
-		cpu.getRegisterPSW().setFlag(PSWRegister.CARRY_FLAG, addition > 65525);
-		cpu.getRegisterPSW().setFlag(PSWRegister.HALF_CARRY_FLAG, addition > 32767);
-		cpu.getRegisterPSW().setFlag(PSWRegister.ZERO_FLAG, addition == 0);
-		cpu.getRegisterPSW().setFlag(PSWRegister.SUBTRACT_FLAG, false);
-		
-		if (addition > 65525) addition -= 65526;
-		
-		this.setRegister("HL", addition);
+	private String sub(String register, boolean carry) {
+		return String.format("SBC A, %s", register);
 	}
 	
-	public void addsp() {
-		int sByte = cpu.getNext();
-		if ((sByte & 0x80) == 0x80) sByte -= 256;
-		
-		int address = cpu.getStackPointer() + sByte;
-		
-		cpu.getRegisterPSW().setFlag(PSWRegister.CARRY_FLAG, (address > 0xffff || address < 0x0000));
-		cpu.getRegisterPSW().setFlag(PSWRegister.HALF_CARRY_FLAG, (address & 0xff) + sByte > 0xff);
-		cpu.getRegisterPSW().setFlag(PSWRegister.ZERO_FLAG, false);
-		cpu.getRegisterPSW().setFlag(PSWRegister.SUBTRACT_FLAG, false);
-		
-		if (address > 0xffff) address -= 0xffff;
-		if (address < 0x0000) address += 0xffff;
-		
-		this.setRegister("SP", address);
+	private String subn(String register) {
+		return String.format("SUB A, %s", Utils.toHex(cpu.getMemory().read(cpu.getProgramCounter() + 1)));
 	}
 	
-	public void inc16(String register) {
-		int addition = this.getRegister(register) + 1;
-		
-		if (addition > 65525) addition -= 65526;
-		
-		this.setRegister(register, addition);
+	private String subn(String register, boolean carry) {
+		return String.format("SBC A, %s", Utils.toHex(cpu.getMemory().read(cpu.getProgramCounter() + 1)));
 	}
 	
-	public void dec16(String register) {
-		int subtraction = this.getRegister(register) - 1;
-		
-		if (subtraction < 0) subtraction += 65526;
-		
-		this.setRegister(register, subtraction);
+	private String and(String register) {
+		return String.format("AND A, %s", register);
 	}
 	
-	public void nop() {
-		//Does nothing
+	private String andn(String register) {
+		return String.format("AND A, %s", Utils.toHex(cpu.getMemory().read(cpu.getProgramCounter() + 1)));
 	}
 	
-	public void daa() {
-		if (cpu.getRegisterPSW().getFlag(PSWRegister.SUBTRACT_FLAG)) {
-			if (cpu.getRegisterPSW().getFlag(PSWRegister.HALF_CARRY_FLAG)) {
-				int subtraction = this.getRegister("A") - 6;
-				if (subtraction < 0) subtraction += 256;
-				this.setRegister("A", subtraction);
-			}
-			if (cpu.getRegisterPSW().getFlag(PSWRegister.CARRY_FLAG)) {
-				int subtraction = this.getRegister("A") - 96;
-				if (subtraction < 0) subtraction += 256;
-				this.setRegister("A", subtraction);
-			}
-		} else {
-			if (cpu.getRegisterPSW().getFlag(PSWRegister.HALF_CARRY_FLAG) || (this.getRegister("A") & 0xf) > 9) {
-				int addition = this.getRegister("A") + 6;
-				this.setRegister("A", addition);
-			}
-			if (cpu.getRegisterPSW().getFlag(PSWRegister.CARRY_FLAG) || this.getRegister("A") > 9) {
-				int addition = this.getRegister("A") - 96;
-				this.setRegister("A", addition);
-			}
-		}
-		
-		cpu.getRegisterPSW().setFlag(PSWRegister.CARRY_FLAG, this.getRegister("A") > 255);
-		cpu.getRegisterPSW().setFlag(PSWRegister.HALF_CARRY_FLAG, false);
-		cpu.getRegisterPSW().setFlag(PSWRegister.ZERO_FLAG, this.getRegister("A") == 0);
-		
-		if (this.getRegister("A") > 255) this.setRegister("A", this.getRegister("A") - 256);
+	private String or(String register) {
+		return String.format("OR A, %s", register);
 	}
 	
-	public void halt() {
-		cpu.setCpuOn(false);
+	private String orn(String register) {
+		return String.format("OR A, %s", Utils.toHex(cpu.getMemory().read(cpu.getProgramCounter() + 1)));
 	}
 	
-	public void stop() {
-		cpu.setCpuOn(false);
-		cpu.setScreenOn(false);
+	private String xor(String register) {
+		return String.format("XOR A, %s", register);
 	}
 	
-	public void inte(boolean on) {
-		cpu.setInterruptDisabled(on);
+	private String xorn(String register) {
+		return String.format("XOR A, %s", Utils.toHex(cpu.getMemory().read(cpu.getProgramCounter() + 1)));
 	}
 	
-	public void cpl() {
-		int complement = ~this.getRegister("A");
-		
-		cpu.getRegisterPSW().setFlag(PSWRegister.HALF_CARRY_FLAG, true);
-		cpu.getRegisterPSW().setFlag(PSWRegister.SUBTRACT_FLAG, true);
-		
-		this.setRegister("A", complement);
+	private String cp(String register) {
+		return String.format("CP A, %s", register);
 	}
 	
-	public void ccf() {
-		cpu.getRegisterPSW().setFlag(PSWRegister.CARRY_FLAG, !cpu.getRegisterPSW().getFlag(PSWRegister.CARRY_FLAG));
+	private String cpn(String register) {
+		return String.format("CP A, %s", Utils.toHex(cpu.getMemory().read(cpu.getProgramCounter() + 1)));
 	}
 	
-	public void scf() {
-		cpu.getRegisterPSW().setFlag(PSWRegister.CARRY_FLAG, true);
+	private String inc(String register) {
+		return String.format("INC %s", register);
 	}
 	
-	public void rl(String register, boolean carry) {
-		int shifted = this.getRegister(register) << 1;
-		
-		cpu.getRegisterPSW().setFlag(PSWRegister.CARRY_FLAG, (shifted >> 8) != 0);
-		cpu.getRegisterPSW().setFlag(PSWRegister.HALF_CARRY_FLAG, false);
-		cpu.getRegisterPSW().setFlag(PSWRegister.ZERO_FLAG, shifted == 0);
-		cpu.getRegisterPSW().setFlag(PSWRegister.SUBTRACT_FLAG, false);
-		
-		if (carry) shifted |= (cpu.getRegisterPSW().getFlag(PSWRegister.CARRY_FLAG) ? 1 : 0);
-		
-		if (shifted > 255) shifted -= 256;
-		
-		this.setRegister(register, shifted);
+	private String dec(String register) {
+		return String.format("DEC %s", register);
 	}
 	
-	public void rr(String register, boolean carry) {
-		int shifted = this.getRegister(register) >> 1;
-		
-		cpu.getRegisterPSW().setFlag(PSWRegister.CARRY_FLAG, (this.getRegister(register) & 1) == 1);
-		cpu.getRegisterPSW().setFlag(PSWRegister.HALF_CARRY_FLAG, false);
-		cpu.getRegisterPSW().setFlag(PSWRegister.ZERO_FLAG, shifted == 0);
-		cpu.getRegisterPSW().setFlag(PSWRegister.SUBTRACT_FLAG, false);
-		
-		if (carry) shifted |= (cpu.getRegisterPSW().getFlag(PSWRegister.CARRY_FLAG) ? 1 : 0) << 7;
-		
-		this.setRegister(register, shifted);
+	private String add16(String register) {
+		return String.format("ADD HL, %s", register);
 	}
 	
-	public void jp(String register) {
-		cpu.setProgramCounter(this.getRegister(register));
+	private String addsp() {
+		return String.format("ADD SP, %s", Utils.toHex(cpu.getMemory().read(cpu.getProgramCounter() + 1)));
 	}
 	
-	public void jpc(String flag) {
-		switch (flag) {
-			case "NZ": if (!cpu.getRegisterPSW().getFlag(PSWRegister.ZERO_FLAG)) this.jp("nn"); break;
-			case "Z": if (cpu.getRegisterPSW().getFlag(PSWRegister.ZERO_FLAG)) this.jp("nn"); break;
-			case "NC": if (!cpu.getRegisterPSW().getFlag(PSWRegister.CARRY_FLAG)) this.jp("nn"); break;
-			case "C": if (cpu.getRegisterPSW().getFlag(PSWRegister.CARRY_FLAG)) this.jp("nn"); break;
-		}
+	private String daa() {
+		return "DAA";
 	}
 	
-	public void jpr() {
-		int sByte = cpu.getNext();
-		if ((sByte & 0x80) == 0x80) sByte -= 256;
-		
-		cpu.setProgramCounter(cpu.getProgramCounter() + sByte);
+	private String cpl() {
+		return "CPL";
 	}
 	
-	public void jprc(String flag) {
-		switch (flag) {
-			case "NZ": if (!cpu.getRegisterPSW().getFlag(PSWRegister.ZERO_FLAG)) this.jpr(); break;
-			case "Z": if (cpu.getRegisterPSW().getFlag(PSWRegister.ZERO_FLAG)) this.jpr(); break;
-			case "NC": if (!cpu.getRegisterPSW().getFlag(PSWRegister.CARRY_FLAG)) this.jpr(); break;
-			case "C": if (cpu.getRegisterPSW().getFlag(PSWRegister.CARRY_FLAG)) this.jpr(); break;
-		}
+	private String ccf() {
+		return "CCF";
 	}
 	
-	public void call() {
-		cpu.getMemory().write(cpu.getStackPointer(), cpu.getProgramCounter() + 1 >> 8);
-		cpu.getMemory().write(cpu.getStackPointer() - 1, cpu.getProgramCounter() + 1 & 0xff);
-		cpu.setStackPointer(cpu.getStackPointer() - 2);
-		
-		cpu.setProgramCounter(this.getRegister("nn"));
+	private String scf() {
+		return "SCF";
 	}
 	
-	public void callc(String flag) {
-		switch (flag) {
-			case "NZ": if (!cpu.getRegisterPSW().getFlag(PSWRegister.ZERO_FLAG)) this.call(); break;
-			case "Z": if (cpu.getRegisterPSW().getFlag(PSWRegister.ZERO_FLAG)) this.call(); break;
-			case "NC": if (!cpu.getRegisterPSW().getFlag(PSWRegister.CARRY_FLAG)) this.call(); break;
-			case "C": if (cpu.getRegisterPSW().getFlag(PSWRegister.CARRY_FLAG)) this.call(); break;
-		}
+	private String halt() {
+		return "HALT";
 	}
 	
-	public void rst(int offset) {
-		cpu.getMemory().write(cpu.getStackPointer(), cpu.getProgramCounter() >> 8);
-		cpu.getMemory().write(cpu.getStackPointer() - 1, cpu.getProgramCounter() & 0xff);
-		cpu.setStackPointer(cpu.getStackPointer() - 2);
-		
-		cpu.setProgramCounter(offset);
+	private String stop() {
+		return "STOP";
 	}
 	
-	public void ret(boolean enable) {
-		cpu.setStackPointer(cpu.getStackPointer() + 2);
-		cpu.setProgramCounter(cpu.getMemory().read((cpu.getStackPointer()) << 8) | (cpu.getStackPointer() - 1 & 0xff));
-		
-		if (enable) cpu.setInterruptDisabled(!enable);
+	private String inte(boolean on) {
+		if (on) return "EI";
+		return "DI";
 	}
 	
-	public void retc(String flag) {
-		switch (flag) {
-			case "NZ": if (!cpu.getRegisterPSW().getFlag(PSWRegister.ZERO_FLAG)) this.ret(false); break;
-			case "Z": if (cpu.getRegisterPSW().getFlag(PSWRegister.ZERO_FLAG)) this.ret(false); break;
-			case "NC": if (!cpu.getRegisterPSW().getFlag(PSWRegister.CARRY_FLAG)) this.ret(false); break;
-			case "C": if (cpu.getRegisterPSW().getFlag(PSWRegister.CARRY_FLAG)) this.ret(false); break;
-		}
+	private String rla(boolean carry) {
+		if (carry) return "RLA";
+		return "RLCA";
 	}
 	
-	public void swap(String register) {
-		int msb = this.getRegister(register) >> 4;
-		int lsb = this.getRegister(register) & 0xf;
-		
-		int swapped = lsb << 4 | msb;
-		
-		cpu.getRegisterPSW().setFlag(PSWRegister.CARRY_FLAG, false);
-		cpu.getRegisterPSW().setFlag(PSWRegister.HALF_CARRY_FLAG, false);
-		cpu.getRegisterPSW().setFlag(PSWRegister.ZERO_FLAG, swapped == 0);
-		cpu.getRegisterPSW().setFlag(PSWRegister.SUBTRACT_FLAG, false);
-		
-		this.setRegister(register, swapped);
+	private String rra(boolean carry) {
+		if (carry) return "RRA";
+		return "RRCA";
 	}
 	
-	public void sl(String register) {
-		int shifted = this.getRegister(register) << 1;
-		
-		cpu.getRegisterPSW().setFlag(PSWRegister.CARRY_FLAG, shifted >> 8 == 1);
-		cpu.getRegisterPSW().setFlag(PSWRegister.HALF_CARRY_FLAG, false);
-		cpu.getRegisterPSW().setFlag(PSWRegister.ZERO_FLAG, shifted == 0);
-		cpu.getRegisterPSW().setFlag(PSWRegister.SUBTRACT_FLAG, false);
-		
-		if (shifted > 255) shifted -= 256;
-		
-		this.setRegister(register, shifted);
+	private String jpnn() {
+		return String.format("JP %s", Utils.toHex(Utils.covert8to16(cpu.getMemory().read(cpu.getProgramCounter() + 1), cpu.getMemory().read(cpu.getProgramCounter() + 2))));
 	}
 	
-	public void sr(String register, boolean msbChange) {
-		int shifted = this.getRegister(register) >> 1;
-		
-		if (!msbChange) shifted |= this.getRegister(register) & 0x80;
-		
-		cpu.getRegisterPSW().setFlag(PSWRegister.CARRY_FLAG, (this.getRegister(register) & 0x1) == 1);
-		cpu.getRegisterPSW().setFlag(PSWRegister.HALF_CARRY_FLAG, false);
-		cpu.getRegisterPSW().setFlag(PSWRegister.ZERO_FLAG, shifted == 0);
-		cpu.getRegisterPSW().setFlag(PSWRegister.SUBTRACT_FLAG, false);
-		
-		this.setRegister(register, shifted);
+	private String jpc(String flag) {
+		return String.format("JP %s %s", flag, Utils.toHex(Utils.covert8to16(cpu.getMemory().read(cpu.getProgramCounter() + 1), cpu.getMemory().read(cpu.getProgramCounter() + 2))));
 	}
 	
-	public void bit(int bit, String register) {
-		cpu.getRegisterPSW().setFlag(PSWRegister.HALF_CARRY_FLAG, true);
-		cpu.getRegisterPSW().setFlag(PSWRegister.ZERO_FLAG, (this.getRegister(register) & (1 << bit)) != (1 << bit));
-		cpu.getRegisterPSW().setFlag(PSWRegister.SUBTRACT_FLAG, false);
+	private String jphl() {
+		return "JP HL";
 	}
 	
-	public void res(int bit, String register) {
-		this.setRegister(register, this.getRegister(register) & ~(1 << bit));
-	}
-
-	public void set(int bit, String register) {
-		this.setRegister(register, this.getRegister(register) | (1 << bit));
+	private String jpr() {
+		return String.format("JR %s", Utils.toHex(cpu.getMemory().read(cpu.getProgramCounter() + 1)));
 	}
 	
-	public int getRegister(String register) {
-		int lsb = 0, msb = 0;
-		switch (register) {
-			case "A": return cpu.getRegisterPSW().getRegisterA();
-			case "F": return cpu.getRegisterPSW().getStatusFlags();
-			case "B": return cpu.getRegisterBC().getRegister1();
-			case "C": return cpu.getRegisterBC().getRegister2();
-			case "D": return cpu.getRegisterDE().getRegister1();
-			case "E": return cpu.getRegisterDE().getRegister2();
-			case "H": return cpu.getRegisterHL().getRegister1();
-			case "L": return cpu.getRegisterHL().getRegister2();
-			case "AF": return cpu.getRegisterPSW().getRegister();
-			case "BC": return cpu.getRegisterBC().getRegister();
-			case "DE": return cpu.getRegisterDE().getRegister();
-			case "HL": return cpu.getRegisterHL().getRegister();
-			case "SP": return cpu.getStackPointer();
-			case "(BC)": return cpu.getMemory().read(cpu.getRegisterBC().getRegister());
-			case "(DE)": return cpu.getMemory().read(cpu.getRegisterDE().getRegister());
-			case "(HL)": return cpu.getMemory().read(cpu.getRegisterHL().getRegister());
-			case "(nn)": lsb = cpu.getNext(); msb = cpu.getNext(); return cpu.getMemory().read(Utils.covert8to16(lsb, msb));
-			case "n": return cpu.getNext();
-			case "nn": lsb = cpu.getNext(); msb = cpu.getNext(); return Utils.covert8to16(lsb, msb);
-		}
-		return -1;
+	private String jprc(String flag) {
+		return String.format("JR %s %s", flag, Utils.toHex(cpu.getMemory().read(cpu.getProgramCounter() + 1)));
 	}
 	
-	public void setRegister(String register, int data) {
-		switch (register) {
-			case "A": cpu.getRegisterPSW().setRegisterA(data); break;
-			case "F": cpu.getRegisterPSW().setStatusFlags(data); break;
-			case "B": cpu.getRegisterBC().setRegister1(data); break;
-			case "C": cpu.getRegisterBC().setRegister2(data); break;
-			case "D": cpu.getRegisterDE().setRegister1(data); break;
-			case "E": cpu.getRegisterDE().setRegister2(data); break;
-			case "H": cpu.getRegisterHL().setRegister1(data); break;
-			case "L": cpu.getRegisterHL().setRegister2(data); break;
-			case "AF": cpu.getRegisterPSW().setRegister(data); break;
-			case "BC": cpu.getRegisterBC().setRegister(data); break;
-			case "DE": cpu.getRegisterDE().setRegister(data); break;
-			case "HL": cpu.getRegisterHL().setRegister(data); break;
-			case "SP": cpu.setStackPointer(data); break;
-			case "(BC)": cpu.getMemory().write(cpu.getRegisterBC().getRegister(), data); break;
-			case "(DE)": cpu.getMemory().write(cpu.getRegisterDE().getRegister(), data); break;
-			case "(HL)": cpu.getMemory().write(cpu.getRegisterHL().getRegister(), data); break;
-			case "(nn)": int lsb = cpu.getNext(); int msb = cpu.getNext(); cpu.getMemory().write(Utils.covert8to16(lsb, msb), data); break;
-		}
+	private String call() {
+		return String.format("CALL %s", Utils.toHex(Utils.covert8to16(cpu.getMemory().read(cpu.getProgramCounter() + 1), cpu.getMemory().read(cpu.getProgramCounter() + 2))));
+	}
+	
+	private String callc(String flag) {
+		return String.format("CALL %s %s", flag, Utils.toHex(Utils.covert8to16(cpu.getMemory().read(cpu.getProgramCounter() + 1), cpu.getMemory().read(cpu.getProgramCounter() + 2))));
+	}
+	
+	private String rst(int vec) {
+		return String.format("RST %s", Utils.toHex(vec));
+	}
+	
+	private String ret(boolean interrupt) {
+		if (interrupt) return "RET";
+		return "RETI";
+	}
+	
+	private String retc(String flag) {
+		return String.format("RET %s", flag);
+	}
+	
+	private String swap(String register) {
+		return String.format("SWAP %s", register);
+	}
+	
+	private String rl(String register, boolean carry) {
+		if (carry) return String.format("RL %s", register);
+		return String.format("RLC %s", register);
+	}
+	
+	private String rr(String register, boolean carry) {
+		if (carry) return String.format("RR %s", register);
+		return String.format("RRC %s", register);
+	}
+	
+	private String sl(String register) {
+		return String.format("SLA %s", register);
+	}
+	
+	private String sr(String register, boolean msb) {
+		if (msb) return String.format("SRL %s", register);
+		return String.format("SRA %s", register);
+	}
+	
+	private String bit(int bit, String register) {
+		return String.format("BIT %d %s", bit, register);
+	}
+	
+	private String set(int bit, String register) {
+		return String.format("SET %d %s", bit, register);
+	}
+	
+	private String res(int bit, String register) {
+		return String.format("RES %d %s", bit, register);
 	}
 }

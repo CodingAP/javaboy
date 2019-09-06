@@ -175,6 +175,15 @@ public class Opcodes {
 			case 0xad: this.xor("L"); break;
 			case 0xae: this.xor("(HL)"); break;
 			case 0xee: this.xor("n"); break;
+			case 0xbf: this.cp("A"); break;
+			case 0xb8: this.cp("B"); break;
+			case 0xb9: this.cp("C"); break;
+			case 0xba: this.cp("D"); break;
+			case 0xbb: this.cp("E"); break;
+			case 0xbc: this.cp("H"); break;
+			case 0xbd: this.cp("L"); break;
+			case 0xbe: this.cp("(HL)"); break;
+			case 0xfe: this.cp("n"); break;
 			case 0x3c: this.inc("A"); break;
 			case 0x04: this.inc("B"); break;
 			case 0x0c: this.inc("C"); break;
@@ -835,7 +844,7 @@ public class Opcodes {
 	
 	public void jprc(String flag) {
 		switch (flag) {
-			case "NZ": if (!cpu.getRegisterPSW().getFlag(PSWRegister.ZERO_FLAG)) this.jpr(); break;
+			case "NZ": System.out.println(cpu.getRegisterPSW().getFlag(PSWRegister.ZERO_FLAG)); if (!cpu.getRegisterPSW().getFlag(PSWRegister.ZERO_FLAG)) this.jpr(); break;
 			case "Z": if (cpu.getRegisterPSW().getFlag(PSWRegister.ZERO_FLAG)) this.jpr(); break;
 			case "NC": if (!cpu.getRegisterPSW().getFlag(PSWRegister.CARRY_FLAG)) this.jpr(); break;
 			case "C": if (cpu.getRegisterPSW().getFlag(PSWRegister.CARRY_FLAG)) this.jpr(); break;
@@ -924,8 +933,9 @@ public class Opcodes {
 	}
 	
 	public void bit(int bit, String register) {
+		System.out.println(this.getRegister(register) & (1 << bit) >> bit);
 		cpu.getRegisterPSW().setFlag(PSWRegister.HALF_CARRY_FLAG, true);
-		cpu.getRegisterPSW().setFlag(PSWRegister.ZERO_FLAG, (this.getRegister(register) & (1 << bit)) != (1 << bit));
+		cpu.getRegisterPSW().setFlag(PSWRegister.ZERO_FLAG, (this.getRegister(register) & (1 << bit)) >> bit == 0);
 		cpu.getRegisterPSW().setFlag(PSWRegister.SUBTRACT_FLAG, false);
 	}
 	

@@ -68,4 +68,8 @@ public class Utils {
 	public static String toHex(int value) {
 		return Integer.toHexString(value);
 	}
+	
+	public static String toBinary(int value) {
+		return Integer.toBinaryString(value);
+	}
 }
