@@ -579,7 +579,7 @@ public class Opcodes {
 	
 	public void pop(String register) {
 		cpu.setStackPointer(cpu.getStackPointer() + 2);
-		this.setRegister(register, cpu.getMemory().read((cpu.getStackPointer()) << 8) | (cpu.getStackPointer() - 1 & 0xff));
+		this.setRegister(register, (cpu.getMemory().read(cpu.getStackPointer()) << 8) | (cpu.getMemory().read(cpu.getStackPointer() - 1) & 0xff));
 	}
 	
 	public void add(String register) {
@@ -833,6 +833,7 @@ public class Opcodes {
 			case "NC": if (!cpu.getRegisterPSW().getFlag(PSWRegister.CARRY_FLAG)) this.jp("nn"); break;
 			case "C": if (cpu.getRegisterPSW().getFlag(PSWRegister.CARRY_FLAG)) this.jp("nn"); break;
 		}
+		cpu.setProgramCounter(cpu.getProgramCounter() + 2);
 	}
 	
 	public void jpr() {
@@ -844,11 +845,12 @@ public class Opcodes {
 	
 	public void jprc(String flag) {
 		switch (flag) {
-			case "NZ": System.out.println(cpu.getRegisterPSW().getFlag(PSWRegister.ZERO_FLAG)); if (!cpu.getRegisterPSW().getFlag(PSWRegister.ZERO_FLAG)) this.jpr(); break;
-			case "Z": if (cpu.getRegisterPSW().getFlag(PSWRegister.ZERO_FLAG)) this.jpr(); break;
-			case "NC": if (!cpu.getRegisterPSW().getFlag(PSWRegister.CARRY_FLAG)) this.jpr(); break;
-			case "C": if (cpu.getRegisterPSW().getFlag(PSWRegister.CARRY_FLAG)) this.jpr(); break;
+			case "NZ": if (!cpu.getRegisterPSW().getFlag(PSWRegister.ZERO_FLAG)) {this.jpr();} else {cpu.setProgramCounter(cpu.getProgramCounter() + 1);} break;
+			case "Z": if (cpu.getRegisterPSW().getFlag(PSWRegister.ZERO_FLAG)) {this.jpr();} else {cpu.setProgramCounter(cpu.getProgramCounter() + 1);} break;
+			case "NC": if (!cpu.getRegisterPSW().getFlag(PSWRegister.CARRY_FLAG)) {this.jpr();} else {cpu.setProgramCounter(cpu.getProgramCounter() + 1);} break;
+			case "C": if (cpu.getRegisterPSW().getFlag(PSWRegister.CARRY_FLAG)) {this.jpr();} else {cpu.setProgramCounter(cpu.getProgramCounter() + 1);} break;
 		}
+		
 	}
 	
 	public void call() {
@@ -878,7 +880,7 @@ public class Opcodes {
 	
 	public void ret(boolean enable) {
 		cpu.setStackPointer(cpu.getStackPointer() + 2);
-		cpu.setProgramCounter(cpu.getMemory().read((cpu.getStackPointer()) << 8) | (cpu.getStackPointer() - 1 & 0xff));
+		cpu.setProgramCounter((cpu.getMemory().read(cpu.getStackPointer()) << 8) | (cpu.getMemory().read(cpu.getStackPointer() - 1) & 0xff));
 		
 		if (enable) cpu.setInterruptDisabled(!enable);
 	}
@@ -933,7 +935,6 @@ public class Opcodes {
 	}
 	
 	public void bit(int bit, String register) {
-		System.out.println(this.getRegister(register) & (1 << bit) >> bit);
 		cpu.getRegisterPSW().setFlag(PSWRegister.HALF_CARRY_FLAG, true);
 		cpu.getRegisterPSW().setFlag(PSWRegister.ZERO_FLAG, (this.getRegister(register) & (1 << bit)) >> bit == 0);
 		cpu.getRegisterPSW().setFlag(PSWRegister.SUBTRACT_FLAG, false);

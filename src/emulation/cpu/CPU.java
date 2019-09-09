@@ -27,6 +27,7 @@ public class CPU {
 	}
 	
 	public String disassemble() {
+		disassembler.setCounter(programCounter);
 		return disassembler.run(mem.read(programCounter));
 	}
 	
@@ -104,5 +105,9 @@ public class CPU {
 
 	public void setScreenOn(boolean screenOn) {
 		this.screenOn = screenOn;
+	}
+	
+	public Disassembler getDisassembler() {
+		return disassembler;
 	}
 }

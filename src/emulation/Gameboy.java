@@ -21,13 +21,17 @@ public class Gameboy {
 						   "dccc 6ee6 dddd d999 bbbb 6763 6e0e eccc " + 
 						   "dddc 999f bbb9 333e 3c42 b9a5 b9a5 423c " + 
 						   "2104 0111 a800 1a13 be20 fe23 7dfe 3420 " + 
-						   "f506 1978 8623 0520 fb86 20fe 3e01 e050";
-	public String test = "06ff";
+						   "f506 1978 8623 0520 fb86 20fe 3e01 e050 " +
+						   "00c3 0000 ceed 6666 cc0d 000b 0373 0083 " + 
+						   "000c 000d 0008 111f 8889 000e dccc 6ee6 " +
+						   "dddd d999 bbbb 6763 6e0e eccc dddc 999f " + 
+						   "bbb9 333e";
+	public String test = "08fe ff21 1000 e521 1100 e100";
 	
 	public Gameboy() {
 		cpu.attachMemory(mem);
 		mem.loadToROM(bootup);
-		mem.loadToROM(test, 0x100);
+		//mem.loadToROM(test);
 	}
 	
 	public void run() {

@@ -72,4 +72,14 @@ public class Utils {
 	public static String toBinary(int value) {
 		return Integer.toBinaryString(value);
 	}
+	
+	public static String padHex(String hex, int numberOfZeros) {
+		int len = hex.length();
+		if (len == numberOfZeros) return hex;
+		String result = "";
+		for (int i = 0; i < numberOfZeros - len; i++) {
+			result += "0";
+		}
+		return result + hex;
+	}
 }

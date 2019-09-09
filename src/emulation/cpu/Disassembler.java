@@ -4,9 +4,11 @@ import emulation.Utils;
 
 public class Disassembler {
 	private CPU cpu;
+	private int counter;
 	
 	public Disassembler(CPU cpu) {
 		this.cpu = cpu;
+		counter = 0;
 	}
 	
 	public String run(int opcode) {
@@ -265,7 +267,8 @@ public class Disassembler {
 	}
 	
 	public String c6bit() {
-		int opcode = cpu.getMemory().read(cpu.getProgramCounter() + 1);
+		counter += 1;
+		int opcode = cpu.getMemory().read(counter);
 		switch (opcode) {
 			case 0x37: return this.swap("A"); 
 			case 0x30: return this.swap("B"); 
@@ -528,257 +531,332 @@ public class Disassembler {
 	}
 	
 	private String unknown() {
+		counter += 1;
 		return "XXX";
 	}
 	
 	private String nop() {
+		counter += 1;
 		return "NOP";
 	}
 	
 	private String ldn(String register) {
-		return String.format("LD %s, %s", register, Utils.toHex(cpu.getMemory().read(cpu.getProgramCounter() + 1)));
+		counter += 2;
+		return String.format("LD %s, #%s", register, Utils.padHex(Utils.toHex(cpu.getMemory().read(counter - 1)), 2));
 	}
 	
 	private String ldrr(String register1, String register2) {
+		counter += 1;
 		return String.format("LD %s, %s", register1, register2);
 	}
 	
 	private String ldrn(String register1, String register2) {
+		counter += 2;
 		return this.ldn(register1);
 	}
 	
 	private String ldrnn(String register1, String register2) {
-		return String.format("LD %s, %s", register1, Utils.toHex(Utils.covert8to16(cpu.getMemory().read(cpu.getProgramCounter() + 1), cpu.getMemory().read(cpu.getProgramCounter() + 2))));
+		counter += 3;
+		return String.format("LD %s, $%s", register1, Utils.padHex(Utils.toHex(Utils.covert8to16(cpu.getMemory().read(counter - 2), cpu.getMemory().read(counter - 1))), 4));
 	}
 	
 	private String ldnnr(String register1, String register2) {
-		return String.format("LD %s, %s", Utils.toHex(Utils.covert8to16(cpu.getMemory().read(cpu.getProgramCounter() + 1), cpu.getMemory().read(cpu.getProgramCounter() + 2))), register1);
+		counter += 3;
+		return String.format("LD $%s, %s", Utils.padHex(Utils.toHex(Utils.covert8to16(cpu.getMemory().read(counter - 2), cpu.getMemory().read(counter - 1))), 4), register2);
 	}
 	
 	private String ldalp(String register) {
-		if (register == "n") return String.format("LD A, ($FF00 + %s)", Utils.toHex(cpu.getMemory().read(cpu.getProgramCounter() + 1)));
+		counter += 1;
+		if (register == "n") {
+			counter += 1;
+			return String.format("LD A, ($FF00 + #%s)", Utils.padHex(Utils.toHex(cpu.getMemory().read(counter - 1)), 2));
+		}
 		return "LD A, ($FF00 + C)";
 	}
 	
 	private String ldlpa(String register) {
-		if (register == "n") return String.format("LD ($FF00 + %s), A", Utils.toHex(cpu.getMemory().read(cpu.getProgramCounter() + 1)));
+		counter += 1;
+		if (register == "n") {
+			counter += 1;
+			return String.format("LD ($FF00 + #%s), A", Utils.padHex(Utils.toHex(cpu.getMemory().read(counter - 1)), 2));
+		}
 		return "LD ($FF00 + C), A";
 	}
 	
 	private String ldd(String register1, String register2) {
+		counter += 1;
 		if (register1 == "A") return "LD A, (HL-)";
 		return "LD (HL-), A";
 	}
 	
 	private String ldi(String register1, String register2) {
+		counter += 1;
 		if (register1 == "A") return "LD A, (HL+)";
 		return "LD (HL+), A";
 	}
 	
 	private String ldhl() {
-		return "LD HL, SP + n";
+		counter += 2;
+		return String.format("LD HL, SP + #%s", Utils.padHex(Utils.toHex(cpu.getMemory().read(counter - 1)), 2));
 	}
 	
 	private String push(String register) {
+		counter += 1;
 		return String.format("PUSH %s", register);
 	}
 	
 	private String pop(String register) {
+		counter += 1;
 		return String.format("POP %s", register);
 	}
 	
 	private String add(String register) {
+		counter += 1;
 		return String.format("ADD A, %s", register);
 	}
 	
 	private String add(String register, boolean carry) {
+		counter += 1;
 		return String.format("ADC A, %s", register);
 	}
 	
 	private String addn(String register) {
-		return String.format("ADD A, %s", Utils.toHex(cpu.getMemory().read(cpu.getProgramCounter() + 1)));
+		counter += 2;
+		return String.format("ADD A, #%s", Utils.padHex(Utils.toHex(cpu.getMemory().read(counter - 1)), 2));
 	}
 	
 	private String addn(String register, boolean carry) {
-		return String.format("ADC A, %s", Utils.toHex(cpu.getMemory().read(cpu.getProgramCounter() + 1)));
+		counter += 2;
+		return String.format("ADC A, #%s", Utils.padHex(Utils.toHex(cpu.getMemory().read(counter - 1)), 2));
 	}
 	
 	private String sub(String register) {
+		counter += 1;
 		return String.format("SUB A, %s", register);
 	}
 	
 	private String sub(String register, boolean carry) {
+		counter += 1;
 		return String.format("SBC A, %s", register);
 	}
 	
 	private String subn(String register) {
-		return String.format("SUB A, %s", Utils.toHex(cpu.getMemory().read(cpu.getProgramCounter() + 1)));
+		counter += 2;
+		return String.format("SUB A, #%s", Utils.padHex(Utils.toHex(cpu.getMemory().read(counter - 1)), 2));
 	}
 	
 	private String subn(String register, boolean carry) {
-		return String.format("SBC A, %s", Utils.toHex(cpu.getMemory().read(cpu.getProgramCounter() + 1)));
+		counter += 2;
+		return String.format("SBC A, #%s", Utils.padHex(Utils.toHex(cpu.getMemory().read(counter - 1)), 2));
 	}
 	
 	private String and(String register) {
+		counter += 1;
 		return String.format("AND A, %s", register);
 	}
 	
 	private String andn(String register) {
-		return String.format("AND A, %s", Utils.toHex(cpu.getMemory().read(cpu.getProgramCounter() + 1)));
+		counter += 2;
+		return String.format("AND A, #%s", Utils.padHex(Utils.toHex(cpu.getMemory().read(counter - 1)), 2));
 	}
 	
 	private String or(String register) {
+		counter += 1;
 		return String.format("OR A, %s", register);
 	}
 	
 	private String orn(String register) {
-		return String.format("OR A, %s", Utils.toHex(cpu.getMemory().read(cpu.getProgramCounter() + 1)));
+		counter += 2;
+		return String.format("OR A, #%s", Utils.padHex(Utils.toHex(cpu.getMemory().read(counter - 1)), 2));
 	}
 	
 	private String xor(String register) {
+		counter += 1;
 		return String.format("XOR A, %s", register);
 	}
 	
 	private String xorn(String register) {
-		return String.format("XOR A, %s", Utils.toHex(cpu.getMemory().read(cpu.getProgramCounter() + 1)));
+		counter += 2;
+		return String.format("XOR A, #%s", Utils.padHex(Utils.toHex(cpu.getMemory().read(counter - 1)), 2));
 	}
 	
 	private String cp(String register) {
+		counter += 1;
 		return String.format("CP A, %s", register);
 	}
 	
 	private String cpn(String register) {
-		return String.format("CP A, %s", Utils.toHex(cpu.getMemory().read(cpu.getProgramCounter() + 1)));
+		counter += 2;
+		return String.format("CP A, #%s", Utils.padHex(Utils.toHex(cpu.getMemory().read(counter - 1)), 2));
 	}
 	
 	private String inc(String register) {
+		counter += 1;
 		return String.format("INC %s", register);
 	}
 	
 	private String dec(String register) {
+		counter += 1;
 		return String.format("DEC %s", register);
 	}
 	
 	private String add16(String register) {
+		counter += 1;
 		return String.format("ADD HL, %s", register);
 	}
 	
 	private String addsp() {
-		return String.format("ADD SP, %s", Utils.toHex(cpu.getMemory().read(cpu.getProgramCounter() + 1)));
+		counter += 2;
+		return String.format("ADD SP, #%s", Utils.padHex(Utils.toHex(cpu.getMemory().read(counter - 1)), 2));
 	}
 	
 	private String daa() {
+		counter += 1;
 		return "DAA";
 	}
 	
 	private String cpl() {
+		counter += 1;
 		return "CPL";
 	}
 	
 	private String ccf() {
+		counter += 1;
 		return "CCF";
 	}
 	
 	private String scf() {
+		counter += 1;
 		return "SCF";
 	}
 	
 	private String halt() {
+		counter += 1;
 		return "HALT";
 	}
 	
 	private String stop() {
+		counter += 1;
 		return "STOP";
 	}
 	
 	private String inte(boolean on) {
+		counter += 1;
 		if (on) return "EI";
 		return "DI";
 	}
 	
 	private String rla(boolean carry) {
+		counter += 1;
 		if (carry) return "RLA";
 		return "RLCA";
 	}
 	
 	private String rra(boolean carry) {
+		counter += 1;
 		if (carry) return "RRA";
 		return "RRCA";
 	}
 	
 	private String jpnn() {
-		return String.format("JP %s", Utils.toHex(Utils.covert8to16(cpu.getMemory().read(cpu.getProgramCounter() + 1), cpu.getMemory().read(cpu.getProgramCounter() + 2))));
+		counter += 3;
+		return String.format("JP $%s", Utils.padHex(Utils.toHex(Utils.covert8to16(cpu.getMemory().read(counter - 2), cpu.getMemory().read(counter - 1))), 4));
 	}
 	
 	private String jpc(String flag) {
-		return String.format("JP %s %s", flag, Utils.toHex(Utils.covert8to16(cpu.getMemory().read(cpu.getProgramCounter() + 1), cpu.getMemory().read(cpu.getProgramCounter() + 2))));
+		counter += 3;
+		return String.format("JP %s $%s", flag, Utils.padHex(Utils.toHex(Utils.covert8to16(cpu.getMemory().read(counter - 2), cpu.getMemory().read(counter - 1))), 4));
 	}
 	
 	private String jphl() {
+		counter += 1;
 		return "JP HL";
 	}
 	
 	private String jpr() {
-		return String.format("JR %s", Utils.toHex(cpu.getMemory().read(cpu.getProgramCounter() + 1)));
+		counter += 2;
+		return String.format("JR #%s", Utils.padHex(Utils.toHex(cpu.getMemory().read(counter - 1)), 2));
 	}
 	
 	private String jprc(String flag) {
-		return String.format("JR %s %s", flag, Utils.toHex(cpu.getMemory().read(cpu.getProgramCounter() + 1)));
+		counter += 2;
+		return String.format("JR %s #%s", flag, Utils.padHex(Utils.toHex(cpu.getMemory().read(counter - 1)), 2));
 	}
 	
 	private String call() {
-		return String.format("CALL %s", Utils.toHex(Utils.covert8to16(cpu.getMemory().read(cpu.getProgramCounter() + 1), cpu.getMemory().read(cpu.getProgramCounter() + 2))));
+		counter += 3;
+		return String.format("CALL $%s", Utils.padHex(Utils.toHex(Utils.covert8to16(cpu.getMemory().read(counter - 2), cpu.getMemory().read(counter - 1))), 4));
 	}
 	
 	private String callc(String flag) {
-		return String.format("CALL %s %s", flag, Utils.toHex(Utils.covert8to16(cpu.getMemory().read(cpu.getProgramCounter() + 1), cpu.getMemory().read(cpu.getProgramCounter() + 2))));
+		counter += 3;
+		return String.format("CALL %s $%s", flag, Utils.padHex(Utils.toHex(Utils.covert8to16(cpu.getMemory().read(counter - 2), cpu.getMemory().read(counter - 1))), 4));
 	}
 	
 	private String rst(int vec) {
-		return String.format("RST %s", Utils.toHex(vec));
+		counter += 1;
+		return String.format("RST $%s", Utils.padHex(Utils.toHex(vec), 4));
 	}
 	
 	private String ret(boolean interrupt) {
-		if (interrupt) return "RET";
-		return "RETI";
+		counter += 1;
+		if (interrupt) return "RETI";
+		return "RET";
 	}
 	
 	private String retc(String flag) {
+		counter += 1;
 		return String.format("RET %s", flag);
 	}
 	
 	private String swap(String register) {
+		counter += 1;
 		return String.format("SWAP %s", register);
 	}
 	
 	private String rl(String register, boolean carry) {
+		counter += 1;
 		if (carry) return String.format("RL %s", register);
 		return String.format("RLC %s", register);
 	}
 	
 	private String rr(String register, boolean carry) {
+		counter += 1;
 		if (carry) return String.format("RR %s", register);
 		return String.format("RRC %s", register);
 	}
 	
 	private String sl(String register) {
+		counter += 1;
 		return String.format("SLA %s", register);
 	}
 	
 	private String sr(String register, boolean msb) {
+		counter += 1;
 		if (msb) return String.format("SRL %s", register);
 		return String.format("SRA %s", register);
 	}
 	
 	private String bit(int bit, String register) {
+		counter += 1;
 		return String.format("BIT %d %s", bit, register);
 	}
 	
 	private String set(int bit, String register) {
+		counter += 1;
 		return String.format("SET %d %s", bit, register);
 	}
 	
 	private String res(int bit, String register) {
+		counter += 1;
 		return String.format("RES %d %s", bit, register);
+	}
+	
+	public int getCounter() {
+		return counter;
+	}
+	
+	public void setCounter(int value) {
+		counter = value;
 	}
 }

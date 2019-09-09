@@ -36,7 +36,7 @@ public class PSWRegister {
 	
 	public boolean getFlag(int flag) {
 		int flagState = statusFlags & flag;
-		return (flagState == 1) ? true : false;
+		return (flagState == flag);
 	}
 	
 	public void setFlag(int flag, boolean on) {
